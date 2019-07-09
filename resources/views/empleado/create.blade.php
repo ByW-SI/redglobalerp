@@ -88,14 +88,14 @@
 								<div class="card-body">
 									<div class="row">
 										<div class="form-group col-sm-4">
-											<label class="control-label" for="telefono">Teléfono:</label>
-											<input type="text" class="form-control" name="telefono" id="telefono" value="{{ $empleado->telefono }}">
+											<label class="control-label" for="telefono"><i class="fa fa-asterisk" aria-hidden="true"></i>Teléfono:</label>
+											<input type="text" class="form-control" name="telefono" id="telefono" value="{{ $empleado->telefono }}" required="">
 										</div>
 										<div class="form-group col-sm-4">
-											<label class="control-label" for="movil">Celular:</label>
-											<input type="text" class="form-control" name="movil" id="movil" value="{{ $empleado->movil }}">
+											<label class="control-label" for="movil"><i class="fa fa-asterisk" aria-hidden="true"></i>Celular:</label>
+											<input type="text" class="form-control" name="movil" id="movil" value="{{ $empleado->movil }}" required="">
 										</div>
-										<div class="form-group col-sm-4">
+										<div class="form-group col-sm-4" id="div-correo">
 											<label class="control-label" for="email"><i class="fa fa-asterisk" aria-hidden="true"></i>Correo electrónico:</label>
 											<input type="text" class="form-control" name="email" id="email" value="{{ $empleado->email }}" required="">
 										</div>
@@ -509,9 +509,13 @@
 			$("#licenciasT").hide();
 			$("#accidentesT").hide();
 			var empleado = $("#tipo").val();
-			if(empleado === "Operador"){
+			$('#div-correo').children().eq(0).children().prop('style', '');
+			$('#div-correo').children().eq(1).prop('required', true);
+			if(empleado === "Operadores"){
 				$("#licenciasT").show();
 				$("#accidentesT").show();
+				$('#div-correo').children().eq(0).children().prop('style', 'display:none;');
+				$('#div-correo').children().eq(1).prop('required', false);
 			}
 		});
 		$('#nacionalidad').change(function(e){
@@ -522,8 +526,8 @@
 			}
 			
 		});	
-		document.getElementById("laboralesframe").width();
-		document.getElementById("laboralesframe").height();
+		//document.getElementById("laboralesframe").width();
+		//document.getElementById("laboralesframe").height();
 
 	</script>
 @endsection

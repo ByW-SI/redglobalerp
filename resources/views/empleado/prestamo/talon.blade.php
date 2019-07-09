@@ -69,7 +69,7 @@
 		<div class="row" style="margin-top: 5px;">
 			<div class="twelve columns">
 				<p class="justify">
-					Yo  {{ $empleado->fullnamespace }}  con fecha de {{ $prestamo->fecha }} solicito a la empresa {{ $empresa->nombre }}  un préstamo por {{ $prestamo->monto }} pagaderos en {{ $prestamo->numero_pagos }}  (en Meses, quincenas o semanas), por motivo de {{ $prestamo->motivo }} y acepto que  la empresa {{ $empresa->nombre }} me descuente de nómina la cantidad de {{ $prestamo->monto/$prestamo->numero_pagos }} cada (Mes, quincena o semana)
+					Yo  {{ $empleado->fullnamespace }}  con fecha de {{ $prestamo->fecha }} solicito a la empresa RGC  un préstamo por {{ $prestamo->monto }} pagados en {{ $prestamo->numero_pagos }}  (en Meses, quincenas o semanas), por motivo de {{ $prestamo->motivo }} y acepto que  la empresa RGC me descuente de nómina la cantidad de {{ $prestamo->monto/$prestamo->numero_pagos }} cada (Mes, quincena o semana)
 				</p>
 				<p class="justify">
 					Acepto

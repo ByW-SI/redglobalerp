@@ -21,6 +21,7 @@ Route::get('/', function () {
 Route::get('/denegado',function(){
 	return view('errors.denegado');
 })->name('denegado');
+
 Route::get('/home', function () {
 	if(Auth::check()){
     	return view('welcome');
@@ -81,7 +82,9 @@ Route::resource('empleados.licencias','Empleado\EmpleadoLicenciaController');
 Route::resource('empleados.accidentes','Empleado\EmpleadoAccidenteController');
 Route::resource('empleados.permisos','Empleado\EmpleadoPermisoController');
 Route::resource('empleados.disciplinas','Empleado\EmpleadoDisciplinaController');
-Route::resource('empleados.prestamos','Empleado\EmpleadoPrestamosController',['only'=>['index','store']]);
+Route::resource('empleados.prestamos','Empleado\EmpleadoPrestamosController',['only'=>['index','store', 'create']]);
+Route::get('empleados/{empleado}/prestamos/{prestamo}/prestamos-view-talon','Empleado\EmpleadoPrestamosController@viewTalon')->name('showtalon');
+Route::get('empleados/{empleado}/prestamos/{prestamo}/imprimir-talon','Empleado\EmpleadoPrestamosController@getTalon')->name('getTalon');
 Route::resource('empleados.expediente','Empleado\EmpleadoExpedienteController');
 //Route::resource('cotizacions','Cliente\CotizacionController');
 Route::resource('empleados.beneficiario','Empleado\EmpleadoBeneficiarioController',['only'=>['index','create','store','edit','update']]);

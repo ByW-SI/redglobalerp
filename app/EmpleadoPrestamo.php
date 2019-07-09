@@ -14,6 +14,8 @@ class EmpleadoPrestamo extends Model
     	'numero_pagos',
     	'motivo',
     	'descuento_nomina',
+        'interes',
+        'adelanto_nomina',
     	'imagen_talon'
     ];
     protected $hidden=[
