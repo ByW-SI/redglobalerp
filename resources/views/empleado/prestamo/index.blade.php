@@ -89,8 +89,8 @@
 									</td>
 								@else
 									<td>
-										<a href="#" class="btn btn-warning mb-2">Imprimir Talon</a>
-										<a href="#" class="btn btn-primary mt-2">Cargar Talon</a>
+										<a target="_blank" href="{{ route('getTalon', ['empleado' => $empleado, 'prestamo' => $prestamo]) }}" class="btn btn-warning mb-2">Imprimir Talon</a>
+										<a href="{{ route('uploadTalon', ['empleado'=>$empleado, 'prestamo'=>$prestamo]) }}" class="btn btn-primary mt-2">Cargar Talon</a>
 									</td>
 								@endif
 							</tr>

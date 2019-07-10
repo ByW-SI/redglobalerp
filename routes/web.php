@@ -85,6 +85,8 @@ Route::resource('empleados.disciplinas','Empleado\EmpleadoDisciplinaController')
 Route::resource('empleados.prestamos','Empleado\EmpleadoPrestamosController',['only'=>['index','store', 'create']]);
 Route::get('empleados/{empleado}/prestamos/{prestamo}/prestamos-view-talon','Empleado\EmpleadoPrestamosController@viewTalon')->name('showtalon');
 Route::get('empleados/{empleado}/prestamos/{prestamo}/imprimir-talon','Empleado\EmpleadoPrestamosController@getTalon')->name('getTalon');
+Route::get('empleados/{empleado}/prestamos/{prestamo}/cargar-talon','Empleado\EmpleadoPrestamosController@uploadTalon')->name('uploadTalon');
+Route::post('empleados/{empleado}/prestamos/{prestamo}/cargar-talon','Empleado\EmpleadoPrestamosController@storeTalon')->name('storeTalon');
 Route::resource('empleados.expediente','Empleado\EmpleadoExpedienteController');
 //Route::resource('cotizacions','Cliente\CotizacionController');
 Route::resource('empleados.beneficiario','Empleado\EmpleadoBeneficiarioController',['only'=>['index','create','store','edit','update']]);

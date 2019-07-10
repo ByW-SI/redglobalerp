@@ -43,9 +43,7 @@
 				@if($comprobante_domicilio != "pdf")
 				<div class="Portfolio m-3">
 					<a href="#!">
-						{{ $comprobante_domicilio }}
 						<img class="card-img" src="{{ url('/expedientes/'.$empleado->fullname.'/'.$expediente->comprobante_domicilio) }}" alt="">
-						}
 					</a>
 					<div class="desc">Comprobante de Domicilio</div>
 				</div>
@@ -93,7 +91,8 @@
 
 				<!-- ######## BOTONES PARA VER PDF  ###########-->
 
-				<div class="row">@if($hoja_palco == "pdf")
+				<div class="row">
+					@if($hoja_palco == "pdf")
 					<div class="row m-3 my-auto">
 						<div class="col-md-12 text-center">
 							<a class="btn btn-info" target="_blank" href="{{ url('/expedientes/'.$empleado->fullname.'/'.$expediente->hoja_palco) }}">
@@ -164,7 +163,17 @@
 							</a>
 						</div>
 					</div>
-					@endif</div>
+					@endif
+				</div>
+			</div>
+			<div class="row mt-3">
+				@if(count($empleado->datosLab) && $empleado->datosLab->last()->fechabaja != null)
+					<div class="col-md-12 text-center">
+						<a class="btn btn-warning" target="_blank" href="{{ url('/expedientes/'.$empleado->fullname.'/'.$expediente->contrato) }}">
+							Subir Contrato Indeterminado
+						</a>
+					</div>
+				@endif
 			</div>
 		</div>
 	</div>

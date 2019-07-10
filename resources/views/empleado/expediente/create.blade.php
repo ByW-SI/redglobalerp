@@ -41,7 +41,7 @@
 		    			<input id="input-id" type="file" accept=".pdf, .jpg, .jpeg, .png" class="file" name="imss" data-preview-file-type="text" required>
 		    		</div>
 		    		<div class="col-3 col-sm-12 col-md-4 col-xl-4 form-group text-center">
-		    			<label class="control-label" for="">Contrato Firmado</label>
+		    			<label class="control-label" for="">Contrato determinado</label>
 		    			<input id="input-id" type="file" accept=".pdf, .jpg, .jpeg, .png" class="file" name="contrato" data-preview-file-type="text" required>
 		    		</div>
 		    	</div>

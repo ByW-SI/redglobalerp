@@ -39,11 +39,7 @@ class EmpleadoPrestamosController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request, Empleado $empleado)
-    {
-        // if ($request->talon_path && $request->file('talon_path')->isValid()) {
-        //     $talon_path = $request->talon_path->storeAs('prestamos/'.$empleado->fullname, 'talon_prestamo'.$request->fecha.'.'.$request->talon_path->extension(), 'public');
-        // }
-        // $request['imagen_talon'] = $talon_path;
+    { 
         $request['monto'] = str_replace(',', "",$request['monto']);
         $request['empleado_id'] = $empleado->id;
         //dd($request->all());
@@ -100,8 +96,31 @@ class EmpleadoPrestamosController extends Controller
 
     public function getTalon(Empleado $empleado, EmpleadoPrestamo $prestamo)
     {
-        $pdf = PDF::loadView('empleado.prestamo.talon',['empleado'=>$empleado, 'prestamo'=>$prestamo]);
+        $pagos = str_replace(["quincenas", "meses"], "", $prestamo->numero_pagos);
+        $pagos = trim($pagos);
+        $pdf = PDF::loadView('empleado.prestamo.talon',['empleado'=>$empleado, 'prestamo'=>$prestamo, 'pagos'=>$pagos]);
         return $pdf->download('talon.pdf');
+    }
+
+    public function uploadTalon(Empleado $empleado, EmpleadoPrestamo $prestamo)
+    {
+        return view('empleado.prestamo.cargarTalon', ['empleado'=>$empleado, 'prestamo'=>$prestamo]);
+    }
+
+    public function storeTalon(Request $request, Empleado $empleado, EmpleadoPrestamo $prestamo)
+    {
+        if ($request->talon_path && $request->file('talon_path')->isValid()) {
+            $talon_path = $request->talon_path->storeAs('prestamos/'.$empleado->fullname, 'talon_prestamo'.$prestamo->fecha.'.'.$request->talon_path->extension(), 'public');
+            $prestamo->imagen_talon = $talon_path;
+            $prestamo->save();
+            Alert::success('Archivo Guardado', 'Se ha guardado correctamente el archivo');
+            return redirect()->route('empleados.prestamos.index',['empleado'=>$empleado]);
+        }
+        else{
+            Alert::danger('Error', 'No se pudo guardar el archivo');
+            return back()->withInput();
+        }
+
     }
 
     public function viewTalon(Empleado $empleado, EmpleadoPrestamo $prestamo)
