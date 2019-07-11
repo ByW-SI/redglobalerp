@@ -15,7 +15,7 @@
                 <div class="d-flex bd-highlight">
                     <div class="p-2 w-100 bd-highlight">
                         <h5>
-                            <i class="fas fa-box"></i> Mercancia {{index+1}}:
+                            <i class="fas fa-box"></i> Mercancia {{index+1}}:{{ tipo }}
                         </h5>
                     </div>
                     <div class="p-2 flex-shrink-1 bd-highlight">
@@ -47,20 +47,6 @@
                             <option v-for="commodity in commodities" :value="commodity.nombre" :title="commodity.descripcion">{{commodity.nombre}}</option>
                         </select>
                     </div>
-                    <div class="col-4 form-group">
-                        <label>
-                            <i class="fas fa-asterisk"></i> Tipo de servicio:
-                        </label>
-                        <select class="form-control" id="tipo_servicio" :name="'tipo_servicio['+index+']'" v-model="mercancia.tipo_servicio" required>
-                            <option value="">Seleccione una opción</option>
-                            <option value="Terrestre FTL">Terrestre FTL</option>
-                            <option value="Terrestre LTL">Terrestre LTL</option>
-                            <option value="Maritimo FCL">Maritimo FCL</option>
-                            <option value="Maritimo LCL">Maritimo LCL</option>
-                            <option value="Aereo">Aereo</option>
-                            <option value="Ferroviario">Ferroviario</option>
-                        </select>
-                    </div>
                     <div class="col-4 form-group" id="clase_peligrosa" style="display: none">
                         <label><i class="fas fa-asterisk"></i> Clase</label>
                         <input type="number" class="form-control" v-model="mercancia.peligroso_clase" :name="'peligroso_clase['+index+']'" max="9" min="1"></input>
@@ -68,42 +54,6 @@
                     <div class="col-4 form-group" id="nu_peligroso" style="display: none">
                         <label><i class="fas fa-asterisk"></i> NU</label>
                         <input type="text" class="form-control" v-model="mercancia.peligroso_nu" :name="'peligroso_nu['+index+']'">
-                    </div>
-                    <div class="col-12 mb-2">
-                        <h4 class="title">
-                            Dirección de origen
-                        </h4>
-                    </div>
-                    <div class="col-4 form-group">
-                        <label><i class="fas fa-asterisk"></i> Linea 1</label>
-                        <textarea rows="1" type="text" class="form-control" v-model="mercancia.linea1_origen" :name="'linea1_origen['+index+']'" required=""></textarea>
-                    </div>
-                    <div class="col-4 form-group">
-                        <label><i class="fas fa-asterisk"></i> Código Postal</label>
-                        <input type="text" class="form-control" v-model="mercancia.cp_origen" :name="'cp_origen['+index+']'" required="">
-                    </div>
-
-                    <div class="col-12 mb-2">
-                        <h4 class="title">
-                            Dirección de destino
-                        </h4>
-                    </div>
-                    <div class="col-4 form-group">
-                        <label><i class="fas fa-asterisk"></i> Linea 1</label>
-                        <textarea rows="1" type="text" class="form-control" v-model="mercancia.linea1_destino" :name="'linea1_destino['+index+']'" required=""></textarea>
-                    </div>
-                    <div class="col-4 form-group">
-                        <label><i class="fas fa-asterisk"></i> Código Postal</label>
-                        <input type="text" class="form-control" v-model="mercancia.cp_destino" :name="'cp_destino['+index+']'" required="">
-                    </div>
-
-                    <div class="col-4 form-group">
-                        <label><i class="fas fa-asterisk"></i> eta</label>
-                        <input type="date" class="form-control" v-model="mercancia.eta" :name="'eta['+index+']'" required="">
-                    </div>
-                    <div class="col-4 form-group">
-                        <label><i class="fas fa-question-circle"></i>Requiere despacho aduanal</label>
-                        <input type="checkbox" v-model="mercancia.despacho_aduanal" :name="'despacho_aduanal['+index+']'">
                     </div>
                     <div class="col-12 mb-2">
                         <h4 class="title">
@@ -211,6 +161,7 @@
                 mercancias:[],
                 commodities:[],
                 servicios:[],
+                tipo: "",
             }
         },
         watch:{
@@ -225,12 +176,18 @@
                     }
                     if (val[i].tipo_servicio) {
                         // console.log(val[i].tipo_servicio);
-                        this.getServicios(val[i].tipo_servicio);
+                        this.getServicios($('#tipo_servicio option:selected').val());
                     }
                 }
               },
               deep: true
-            }
+            },
+            tipo: {
+
+                handler: function (val, oldVal) {
+                    console.log(val);
+                }
+            },    
         },
         methods:{
             nuevoProducto(){
@@ -256,6 +213,8 @@
                     observaciones:"",
                     serv_extra:[]
                 }
+                console.log($('#tipo_servicio option:selected').val());
+                console.log($('input[name=es_estibable]:checked'));
                 this.mercancias.push(producto);
             },
             removerProducto(index){
@@ -266,7 +225,7 @@
             },
             getCommodities(){
 
-                let url = "/RGC/public/getCommodities";
+                let url = "/getCommodities";
                 //let url = "/getCommodities";
                 axios.get(url).then(res=>{
                     this.commodities = res.data.commodities;
@@ -275,7 +234,7 @@
                 });
             },
             getServicios(servicio){
-                let url=`/RGC/public/getServicios/${servicio}`;
+                let url=`/getServicios/${servicio}`;
                  //let url=`/getServicios/${servicio}`;
                 axios.get(url).then(res=>{
                     this.servicios=res.data.servicios;
@@ -319,7 +278,12 @@
             }
             this.mercancias.push(producto);
             this.getCommodities();
-            console.log('Component mounted.')
+
+            this.tipo = $('#tipo_servicio option:selected').val();
+            console.log('Component mounted Merc.');
+            //Dism /Online /Cleanup-Image /RestoreHealth
+            //sfc /scannow
         }
     }
 </script>
+

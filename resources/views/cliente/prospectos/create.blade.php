@@ -33,7 +33,7 @@
                         <label>
                             <i class="fas fa-asterisk"></i> Tipo de servicio:
                         </label>
-                        <select class="form-control" id="tipo_servicio" name="tipo_servicio" required>
+                        <select  class="form-control" id="tipo_servicio" name="tipo_servicio" required>
                             <option value="">Seleccione una opción</option>
                             <option value="Terrestre FTL">Terrestre FTL</option>
                             <option value="Terrestre LTL">Terrestre LTL</option>
@@ -92,14 +92,14 @@
                         <label><i class="fas fa-question-circle"></i>Requiere despacho aduanal</label>
                         <input type="checkbox" id="despacho_aduanal" name="despacho_aduanal">
                     </div>
-                    <div class="col-4 form-group" id="estibable"  style="display: none">
+                    <div class="col-4 form-group" id="estibable">
                         <label><i class="fas fa-question-circle"></i>¿Es estibable?</label>
                         <div class="form-check form-check-inline">
-						  <input class="form-check-input" type="radio" id="inlineCheckboxSI" name="es_estibable" value="1">
+						  <input class="form-check-input" type="radio" id="inlineCheckboxSI" name="es_estibable" value="1" disabled="">
 						  <label class="form-check-label" for="inlineCheckboxSI">Si</label>
 						</div>
-						<div class="form-check form-check-inline">
-						  <input class="form-check-input" type="radio" id="inlineCheckboxNO" name="es_estibable" value="0">
+						<div class="form-check form-check-inline disabled">
+						  <input class="form-check-input" type="radio" id="inlineCheckboxNO" name="es_estibable" value="0" disabled="">
 						  <label class="form-check-label" for="inlineCheckboxNO">No</label>
 						</div>
                     </div>
@@ -118,4 +118,38 @@
 			</div>
 		</form>
 	</div>
+@endsection
+@section('script')
+    <script>
+        $(document).ready(function() {
+        //set initial state.
+        //$('#textbox1').val($(this).is(':checked'));
+
+        $('#Peligroso').change(function() {
+            if(this.checked) {
+                //alert('checked');
+                $('#clase_peligrosa').show();
+                $('#nu_peligroso').show();
+            }
+            else{
+                $('#clase_peligrosa').hide();
+                $('#nu_peligroso').hide();
+            }
+        });
+        $('#tipo_servicio').change(function(event) {
+            //console.log($('#tipo_servicio option:selected').val());
+            if ($('#tipo_servicio option:selected').val() != '') {
+                $('#inlineCheckboxSI').prop('disabled', false);
+                $('#inlineCheckboxNO').prop('disabled', false);
+            }
+            else{
+                $('#inlineCheckboxSI').prop('disabled', true);
+                $('#inlineCheckboxNO').prop('disabled', true);   
+            }
+        });
+        $('input[name=es_estibable]').click(function(event) {
+            console.log($(this).val());
+        });
+    });
+    </script>
 @endsection

@@ -2369,57 +2369,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
+/* WEBPACK VAR INJECTION */(function($) {//
 //
 //
 //
@@ -2579,7 +2529,8 @@ __webpack_require__.r(__webpack_exports__);
     return {
       mercancias: [],
       commodities: [],
-      servicios: []
+      servicios: [],
+      tipo: ""
     };
   },
   watch: {
@@ -2596,11 +2547,16 @@ __webpack_require__.r(__webpack_exports__);
 
           if (val[i].tipo_servicio) {
             // console.log(val[i].tipo_servicio);
-            this.getServicios(val[i].tipo_servicio);
+            this.getServicios($('#tipo_servicio option:selected').val());
           }
         }
       },
       deep: true
+    },
+    tipo: {
+      handler: function handler(val, oldVal) {
+        console.log(val);
+      }
     }
   },
   methods: {
@@ -2627,6 +2583,8 @@ __webpack_require__.r(__webpack_exports__);
         observaciones: "",
         serv_extra: []
       };
+      console.log($('#tipo_servicio option:selected').val());
+      console.log($('input[name=es_estibable]:checked'));
       this.mercancias.push(producto);
     },
     removerProducto: function removerProducto(index) {
@@ -2637,7 +2595,7 @@ __webpack_require__.r(__webpack_exports__);
     getCommodities: function getCommodities() {
       var _this = this;
 
-      var url = "/RGC/public/getCommodities"; //let url = "/getCommodities";
+      var url = "/getCommodities"; //let url = "/getCommodities";
 
       axios.get(url).then(function (res) {
         _this.commodities = res.data.commodities;
@@ -2648,7 +2606,7 @@ __webpack_require__.r(__webpack_exports__);
     getServicios: function getServicios(servicio) {
       var _this2 = this;
 
-      var url = "/RGC/public/getServicios/".concat(servicio); //let url=`/getServicios/${servicio}`;
+      var url = "/getServicios/".concat(servicio); //let url=`/getServicios/${servicio}`;
 
       axios.get(url).then(function (res) {
         _this2.servicios = res.data.servicios;
@@ -2692,9 +2650,12 @@ __webpack_require__.r(__webpack_exports__);
     };
     this.mercancias.push(producto);
     this.getCommodities();
-    console.log('Component mounted.');
+    this.tipo = $('#tipo_servicio option:selected').val();
+    console.log('Component mounted Merc.'); //Dism /Online /Cleanup-Image /RestoreHealth
+    //sfc /scannow
   }
 });
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js")))
 
 /***/ }),
 
@@ -2803,9 +2764,9 @@ __webpack_require__.r(__webpack_exports__);
     getServicios: function getServicios() {
       var _this = this;
 
-      var servicio = $("#tipo_servicio").val();
-      var url = "/RGC/public/getServicios/".concat(servicio); //let url=`/getServicios/${servicio}`;
+      var servicio = $("#tipo_servicio").val(); //let url=`/RGC/public/getServicios/${servicio}`;
 
+      var url = "/getServicios/".concat(servicio);
       axios.get(url).then(function (res) {
         _this.servicios = res.data.servicios;
       }).catch(function (err) {
@@ -39113,7 +39074,9 @@ var render = function() {
                   _vm._v(
                     " Mercancia " +
                       _vm._s(index + 1) +
-                      ":\n                    "
+                      ":" +
+                      _vm._s(_vm.tipo) +
+                      "\n                    "
                   )
                 ])
               ]),
@@ -39234,78 +39197,6 @@ var render = function() {
                 )
               ]),
               _vm._v(" "),
-              _c("div", { staticClass: "col-4 form-group" }, [
-                _vm._m(4, true),
-                _vm._v(" "),
-                _c(
-                  "select",
-                  {
-                    directives: [
-                      {
-                        name: "model",
-                        rawName: "v-model",
-                        value: mercancia.tipo_servicio,
-                        expression: "mercancia.tipo_servicio"
-                      }
-                    ],
-                    staticClass: "form-control",
-                    attrs: {
-                      id: "tipo_servicio",
-                      name: "tipo_servicio[" + index + "]",
-                      required: ""
-                    },
-                    on: {
-                      change: function($event) {
-                        var $$selectedVal = Array.prototype.filter
-                          .call($event.target.options, function(o) {
-                            return o.selected
-                          })
-                          .map(function(o) {
-                            var val = "_value" in o ? o._value : o.value
-                            return val
-                          })
-                        _vm.$set(
-                          mercancia,
-                          "tipo_servicio",
-                          $event.target.multiple
-                            ? $$selectedVal
-                            : $$selectedVal[0]
-                        )
-                      }
-                    }
-                  },
-                  [
-                    _c("option", { attrs: { value: "" } }, [
-                      _vm._v("Seleccione una opción")
-                    ]),
-                    _vm._v(" "),
-                    _c("option", { attrs: { value: "Terrestre FTL" } }, [
-                      _vm._v("Terrestre FTL")
-                    ]),
-                    _vm._v(" "),
-                    _c("option", { attrs: { value: "Terrestre LTL" } }, [
-                      _vm._v("Terrestre LTL")
-                    ]),
-                    _vm._v(" "),
-                    _c("option", { attrs: { value: "Maritimo FCL" } }, [
-                      _vm._v("Maritimo FCL")
-                    ]),
-                    _vm._v(" "),
-                    _c("option", { attrs: { value: "Maritimo LCL" } }, [
-                      _vm._v("Maritimo LCL")
-                    ]),
-                    _vm._v(" "),
-                    _c("option", { attrs: { value: "Aereo" } }, [
-                      _vm._v("Aereo")
-                    ]),
-                    _vm._v(" "),
-                    _c("option", { attrs: { value: "Ferroviario" } }, [
-                      _vm._v("Ferroviario")
-                    ])
-                  ]
-                )
-              ]),
-              _vm._v(" "),
               _c(
                 "div",
                 {
@@ -39314,7 +39205,7 @@ var render = function() {
                   attrs: { id: "clase_peligrosa" }
                 },
                 [
-                  _vm._m(5, true),
+                  _vm._m(4, true),
                   _vm._v(" "),
                   _c("input", {
                     directives: [
@@ -39357,7 +39248,7 @@ var render = function() {
                   attrs: { id: "nu_peligroso" }
                 },
                 [
-                  _vm._m(6, true),
+                  _vm._m(5, true),
                   _vm._v(" "),
                   _c("input", {
                     directives: [
@@ -39386,218 +39277,10 @@ var render = function() {
                 ]
               ),
               _vm._v(" "),
-              _vm._m(7, true),
-              _vm._v(" "),
-              _c("div", { staticClass: "col-4 form-group" }, [
-                _vm._m(8, true),
-                _vm._v(" "),
-                _c("textarea", {
-                  directives: [
-                    {
-                      name: "model",
-                      rawName: "v-model",
-                      value: mercancia.linea1_origen,
-                      expression: "mercancia.linea1_origen"
-                    }
-                  ],
-                  staticClass: "form-control",
-                  attrs: {
-                    rows: "1",
-                    type: "text",
-                    name: "linea1_origen[" + index + "]",
-                    required: ""
-                  },
-                  domProps: { value: mercancia.linea1_origen },
-                  on: {
-                    input: function($event) {
-                      if ($event.target.composing) {
-                        return
-                      }
-                      _vm.$set(mercancia, "linea1_origen", $event.target.value)
-                    }
-                  }
-                })
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "col-4 form-group" }, [
-                _vm._m(9, true),
-                _vm._v(" "),
-                _c("input", {
-                  directives: [
-                    {
-                      name: "model",
-                      rawName: "v-model",
-                      value: mercancia.cp_origen,
-                      expression: "mercancia.cp_origen"
-                    }
-                  ],
-                  staticClass: "form-control",
-                  attrs: {
-                    type: "text",
-                    name: "cp_origen[" + index + "]",
-                    required: ""
-                  },
-                  domProps: { value: mercancia.cp_origen },
-                  on: {
-                    input: function($event) {
-                      if ($event.target.composing) {
-                        return
-                      }
-                      _vm.$set(mercancia, "cp_origen", $event.target.value)
-                    }
-                  }
-                })
-              ]),
-              _vm._v(" "),
-              _vm._m(10, true),
-              _vm._v(" "),
-              _c("div", { staticClass: "col-4 form-group" }, [
-                _vm._m(11, true),
-                _vm._v(" "),
-                _c("textarea", {
-                  directives: [
-                    {
-                      name: "model",
-                      rawName: "v-model",
-                      value: mercancia.linea1_destino,
-                      expression: "mercancia.linea1_destino"
-                    }
-                  ],
-                  staticClass: "form-control",
-                  attrs: {
-                    rows: "1",
-                    type: "text",
-                    name: "linea1_destino[" + index + "]",
-                    required: ""
-                  },
-                  domProps: { value: mercancia.linea1_destino },
-                  on: {
-                    input: function($event) {
-                      if ($event.target.composing) {
-                        return
-                      }
-                      _vm.$set(mercancia, "linea1_destino", $event.target.value)
-                    }
-                  }
-                })
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "col-4 form-group" }, [
-                _vm._m(12, true),
-                _vm._v(" "),
-                _c("input", {
-                  directives: [
-                    {
-                      name: "model",
-                      rawName: "v-model",
-                      value: mercancia.cp_destino,
-                      expression: "mercancia.cp_destino"
-                    }
-                  ],
-                  staticClass: "form-control",
-                  attrs: {
-                    type: "text",
-                    name: "cp_destino[" + index + "]",
-                    required: ""
-                  },
-                  domProps: { value: mercancia.cp_destino },
-                  on: {
-                    input: function($event) {
-                      if ($event.target.composing) {
-                        return
-                      }
-                      _vm.$set(mercancia, "cp_destino", $event.target.value)
-                    }
-                  }
-                })
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "col-4 form-group" }, [
-                _vm._m(13, true),
-                _vm._v(" "),
-                _c("input", {
-                  directives: [
-                    {
-                      name: "model",
-                      rawName: "v-model",
-                      value: mercancia.eta,
-                      expression: "mercancia.eta"
-                    }
-                  ],
-                  staticClass: "form-control",
-                  attrs: {
-                    type: "date",
-                    name: "eta[" + index + "]",
-                    required: ""
-                  },
-                  domProps: { value: mercancia.eta },
-                  on: {
-                    input: function($event) {
-                      if ($event.target.composing) {
-                        return
-                      }
-                      _vm.$set(mercancia, "eta", $event.target.value)
-                    }
-                  }
-                })
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "col-4 form-group" }, [
-                _vm._m(14, true),
-                _vm._v(" "),
-                _c("input", {
-                  directives: [
-                    {
-                      name: "model",
-                      rawName: "v-model",
-                      value: mercancia.despacho_aduanal,
-                      expression: "mercancia.despacho_aduanal"
-                    }
-                  ],
-                  attrs: {
-                    type: "checkbox",
-                    name: "despacho_aduanal[" + index + "]"
-                  },
-                  domProps: {
-                    checked: Array.isArray(mercancia.despacho_aduanal)
-                      ? _vm._i(mercancia.despacho_aduanal, null) > -1
-                      : mercancia.despacho_aduanal
-                  },
-                  on: {
-                    change: function($event) {
-                      var $$a = mercancia.despacho_aduanal,
-                        $$el = $event.target,
-                        $$c = $$el.checked ? true : false
-                      if (Array.isArray($$a)) {
-                        var $$v = null,
-                          $$i = _vm._i($$a, $$v)
-                        if ($$el.checked) {
-                          $$i < 0 &&
-                            _vm.$set(
-                              mercancia,
-                              "despacho_aduanal",
-                              $$a.concat([$$v])
-                            )
-                        } else {
-                          $$i > -1 &&
-                            _vm.$set(
-                              mercancia,
-                              "despacho_aduanal",
-                              $$a.slice(0, $$i).concat($$a.slice($$i + 1))
-                            )
-                        }
-                      } else {
-                        _vm.$set(mercancia, "despacho_aduanal", $$c)
-                      }
-                    }
-                  }
-                })
-              ]),
-              _vm._v(" "),
-              _vm._m(15, true),
+              _vm._m(6, true),
               _vm._v(" "),
               _c("div", { staticClass: "col-6" }, [
-                _vm._m(16, true),
+                _vm._m(7, true),
                 _vm._v(" "),
                 _c("div", { staticClass: "input-group mb-3" }, [
                   _c("input", {
@@ -39631,7 +39314,7 @@ var render = function() {
                     }
                   }),
                   _vm._v(" "),
-                  _vm._m(17, true),
+                  _vm._m(8, true),
                   _vm._v(" "),
                   _c("input", {
                     directives: [
@@ -39664,7 +39347,7 @@ var render = function() {
                     }
                   }),
                   _vm._v(" "),
-                  _vm._m(18, true),
+                  _vm._m(9, true),
                   _vm._v(" "),
                   _c("input", {
                     directives: [
@@ -39700,7 +39383,7 @@ var render = function() {
               ]),
               _vm._v(" "),
               _c("div", { staticClass: "col-3" }, [
-                _vm._m(19, true),
+                _vm._m(10, true),
                 _vm._v(" "),
                 _c(
                   "select",
@@ -39770,7 +39453,7 @@ var render = function() {
               ]),
               _vm._v(" "),
               _c("div", { staticClass: "col-3" }, [
-                _vm._m(20, true),
+                _vm._m(11, true),
                 _vm._v(" "),
                 _c("input", {
                   directives: [
@@ -39802,7 +39485,7 @@ var render = function() {
               ]),
               _vm._v(" "),
               _c("div", { staticClass: "col-3" }, [
-                _vm._m(21, true),
+                _vm._m(12, true),
                 _vm._v(" "),
                 _c(
                   "select",
@@ -39872,7 +39555,7 @@ var render = function() {
               ]),
               _vm._v(" "),
               _c("div", { staticClass: "col-3" }, [
-                _vm._m(22, true),
+                _vm._m(13, true),
                 _vm._v(" "),
                 _c("input", {
                   directives: [
@@ -39904,7 +39587,7 @@ var render = function() {
               ]),
               _vm._v(" "),
               _c("div", { staticClass: "col-2" }, [
-                _vm._m(23, true),
+                _vm._m(14, true),
                 _vm._v(" "),
                 _c("div", { staticClass: "input-group mb-3" }, [
                   _c("input", {
@@ -39949,7 +39632,7 @@ var render = function() {
               ]),
               _vm._v(" "),
               _c("div", { staticClass: "col-2" }, [
-                _vm._m(24, true),
+                _vm._m(15, true),
                 _vm._v(" "),
                 _c("div", { staticClass: "input-group mb-3" }, [
                   _c("input", {
@@ -40006,7 +39689,7 @@ var render = function() {
                 ])
               ]),
               _vm._v(" "),
-              _vm._m(25, true),
+              _vm._m(16, true),
               _vm._v(" "),
               _c("div", { staticClass: "col-12" }, [
                 _c("label", [_vm._v("Observaciones:")]),
@@ -40089,15 +39772,6 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("label", [
       _c("i", { staticClass: "fas fa-asterisk" }),
-      _vm._v(" Tipo de servicio:\n                    ")
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("label", [
-      _c("i", { staticClass: "fas fa-asterisk" }),
       _vm._v(" Clase")
     ])
   },
@@ -40108,84 +39782,6 @@ var staticRenderFns = [
     return _c("label", [
       _c("i", { staticClass: "fas fa-asterisk" }),
       _vm._v(" NU")
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "col-12 mb-2" }, [
-      _c("h4", { staticClass: "title" }, [
-        _vm._v(
-          "\n                        Dirección de origen\n                    "
-        )
-      ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("label", [
-      _c("i", { staticClass: "fas fa-asterisk" }),
-      _vm._v(" Linea 1")
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("label", [
-      _c("i", { staticClass: "fas fa-asterisk" }),
-      _vm._v(" Código Postal")
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "col-12 mb-2" }, [
-      _c("h4", { staticClass: "title" }, [
-        _vm._v(
-          "\n                        Dirección de destino\n                    "
-        )
-      ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("label", [
-      _c("i", { staticClass: "fas fa-asterisk" }),
-      _vm._v(" Linea 1")
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("label", [
-      _c("i", { staticClass: "fas fa-asterisk" }),
-      _vm._v(" Código Postal")
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("label", [
-      _c("i", { staticClass: "fas fa-asterisk" }),
-      _vm._v(" eta")
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("label", [
-      _c("i", { staticClass: "fas fa-question-circle" }),
-      _vm._v("Requiere despacho aduanal")
     ])
   },
   function() {

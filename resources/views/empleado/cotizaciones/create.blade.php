@@ -48,7 +48,7 @@
 
         $('#Peligroso').change(function() {
             if(this.checked) {
-                //alert('checked');
+                alert('checked');
                 $('#clase_peligrosa').show();
                 $('#nu_peligroso').show();
             }
