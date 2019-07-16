@@ -33,7 +33,7 @@
                         <label>
                             <i class="fas fa-asterisk"></i> Tipo de servicio:
                         </label>
-                        <select  class="form-control" id="tipo_servicio" name="tipo_servicio" required>
+                        <select  class="form-control" id="tipo_servicio" name="tipo_servicio" required ref="selectServicio">
                             <option value="">Seleccione una opción</option>
                             <option value="Terrestre FTL">Terrestre FTL</option>
                             <option value="Terrestre LTL">Terrestre LTL</option>
@@ -105,7 +105,7 @@
                     </div>
 				</div>
 			</div>
-			
+			<example-component :animal="{data: this.$refs}" ></example-component>
 			<mercancias-component></mercancias-component>
 			<servicios-component></servicios-component>
 			<div class="d-flex justify-content-center mb-3">
@@ -121,6 +121,9 @@
 @endsection
 @section('script')
     <script>
+        var valor = new Vue();
+
+        //vm.$refs = data;
         $(document).ready(function() {
         //set initial state.
         //$('#textbox1').val($(this).is(':checked'));

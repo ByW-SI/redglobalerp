@@ -18,7 +18,7 @@ window.Vue = require('vue');
 //  * Eg. ./components/ExampleComponent.vue -> <example-component></example-component>
 //  */
 
-// Vue.component('example-component', require('./components/ExampleComponent.vue'));
+Vue.component('example-component', require('./components/ExampleComponent.vue').default);
 Vue.component('mercancias-component', require('./components/MercanciaComponent.vue').default);
 Vue.component('servicios-component', require('./components/ServicioComponent.vue').default);
 
