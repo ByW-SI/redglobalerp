@@ -65,7 +65,7 @@
                             <i class="fas fa-asterisk"></i> Volumen:
                         </label>
                         <div class="input-group mb-3">
-                            <input type="number" step="0.01" min="0.01" required class="form-control" placeholder="alto" aria-label="alto" :name="'alto['+index+']'" v-model="mercancia.alto" aria-describedby="x-addon1">
+                            <input type="number" step="0.01" min="0.01" required class="form-control volumen-alto" placeholder="alto" aria-label="alto" :name="'alto['+index+']'" v-model="mercancia.alto" aria-describedby="x-addon1">
                             <div class="input-group-prepend">
                                 <span class="input-group-text" id="x-addon1">x</span>
                             </div>
@@ -80,13 +80,13 @@
                         <label class="control-label">
                             <i class="fas fa-asterisk"></i> Unidad:
                         </label>
-                        <select class="form-control" :name="'medidas['+index+']'" v-model="mercancia.medidas" required>
+                        <select class="form-control volumen-unidad" :name="'medidas['+index+']'" v-model="mercancia.medidas" required>
                             <option value="">Seleccione la unidad de medida</option>
-                            <option value="km">Kilómetro</option>
+                            <!-- <option value="km">Kilómetro</option>
                             <option value="hm">Hectómetro</option>
-                            <option value="dam">Decámetro</option>
+                            <option value="dam">Decámetro</option> -->
                             <option value="m">Metro</option>
-                            <option value="dm">Decimetro</option>
+                            <!-- <option value="dm">Decimetro</option> -->
                             <option value="cm">Centimetro</option>
                             <option value="mm">Milímetro</option>
                         </select>
@@ -154,6 +154,65 @@
 </template>
 
 <script>
+    $(document).ready(function($) {
+       console.log('Hola-M');
+        $('#tipo_servicio').change(function(event) {
+            console.log('Cambio');
+            console.log($('input:radio[name=es_estibable]:checked'));
+            cambiarAltoVolumen($('input:radio[name=es_estibable]:checked'));
+               
+        });
+        $('input[name=es_estibable]').click(function(event) {
+            cambiarAltoVolumen(this);
+            // let servicio = $('#tipo_servicio option:selected').val();
+            // console.log($(this).val());
+            // if($(this).val() == 0){
+            //     if(servicio == 'Terrestre FTL' || servicio == 'Terrestre LTL'){
+            //         $('input.volumen-alto').each(function(index, el) {
+            //             $(el).val(2.60);
+            //             $(el).prop('readonly', true);
+            //         });
+            //         $('select.volumen-unidad').each(function(index, el) {
+            //             $(el).children().eq(1).prop('selected', true)
+            //         });
+            //     }
+            //     else if (servicio == 'Maritimo FCL' || servicio == 'Maritimo LCL'){
+            //         $('input.volumen-alto').each(function(index, el) {
+            //             $(el).val(260);
+            //             $(el).prop('readonly', true);
+            //         });
+            //         $('select.volumen-unidad').each(function(index, el) {
+            //             $(el).children().eq(2).prop('selected', true)
+            //         });
+            //     }
+            // }
+        });
+
+        function cambiarAltoVolumen(radio) {
+            let servicio = $('#tipo_servicio option:selected').val();
+            console.log($(radio).val());
+            if($(radio).val() == 0){
+                if(servicio == 'Terrestre FTL' || servicio == 'Terrestre LTL'){
+                    $('input.volumen-alto').each(function(index, el) {
+                        $(el).val(2.60);
+                        $(el).prop('readonly', true);
+                    });
+                    $('select.volumen-unidad').each(function(index, el) {
+                        $(el).children().eq(1).prop('selected', true)
+                    });
+                }
+                else if (servicio == 'Maritimo FCL' || servicio == 'Maritimo LCL'){
+                    $('input.volumen-alto').each(function(index, el) {
+                        $(el).val(260);
+                        $(el).prop('readonly', true);
+                    });
+                    $('select.volumen-unidad').each(function(index, el) {
+                        $(el).children().eq(2).prop('selected', true)
+                    });
+                }
+            }
+        }
+    });
 
     export default {
         data(){

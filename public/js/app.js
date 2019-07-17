@@ -2599,6 +2599,63 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+$(document).ready(function ($) {
+  console.log('Hola-M');
+  $('#tipo_servicio').change(function (event) {
+    console.log('Cambio');
+    console.log($('input:radio[name=es_estibable]:checked'));
+    cambiarAltoVolumen($('input:radio[name=es_estibable]:checked'));
+  });
+  $('input[name=es_estibable]').click(function (event) {
+    cambiarAltoVolumen(this); // let servicio = $('#tipo_servicio option:selected').val();
+    // console.log($(this).val());
+    // if($(this).val() == 0){
+    //     if(servicio == 'Terrestre FTL' || servicio == 'Terrestre LTL'){
+    //         $('input.volumen-alto').each(function(index, el) {
+    //             $(el).val(2.60);
+    //             $(el).prop('readonly', true);
+    //         });
+    //         $('select.volumen-unidad').each(function(index, el) {
+    //             $(el).children().eq(1).prop('selected', true)
+    //         });
+    //     }
+    //     else if (servicio == 'Maritimo FCL' || servicio == 'Maritimo LCL'){
+    //         $('input.volumen-alto').each(function(index, el) {
+    //             $(el).val(260);
+    //             $(el).prop('readonly', true);
+    //         });
+    //         $('select.volumen-unidad').each(function(index, el) {
+    //             $(el).children().eq(2).prop('selected', true)
+    //         });
+    //     }
+    // }
+  });
+
+  function cambiarAltoVolumen(radio) {
+    var servicio = $('#tipo_servicio option:selected').val();
+    console.log($(radio).val());
+
+    if ($(radio).val() == 0) {
+      if (servicio == 'Terrestre FTL' || servicio == 'Terrestre LTL') {
+        $('input.volumen-alto').each(function (index, el) {
+          $(el).val(2.60);
+          $(el).prop('readonly', true);
+        });
+        $('select.volumen-unidad').each(function (index, el) {
+          $(el).children().eq(1).prop('selected', true);
+        });
+      } else if (servicio == 'Maritimo FCL' || servicio == 'Maritimo LCL') {
+        $('input.volumen-alto').each(function (index, el) {
+          $(el).val(260);
+          $(el).prop('readonly', true);
+        });
+        $('select.volumen-unidad').each(function (index, el) {
+          $(el).children().eq(2).prop('selected', true);
+        });
+      }
+    }
+  }
+});
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -39433,7 +39490,7 @@ var render = function() {
                         expression: "mercancia.alto"
                       }
                     ],
-                    staticClass: "form-control",
+                    staticClass: "form-control volumen-alto",
                     attrs: {
                       type: "number",
                       step: "0.01",
@@ -39537,7 +39594,7 @@ var render = function() {
                         expression: "mercancia.medidas"
                       }
                     ],
-                    staticClass: "form-control",
+                    staticClass: "form-control volumen-unidad",
                     attrs: { name: "medidas[" + index + "]", required: "" },
                     on: {
                       change: function($event) {
@@ -39564,23 +39621,7 @@ var render = function() {
                       _vm._v("Seleccione la unidad de medida")
                     ]),
                     _vm._v(" "),
-                    _c("option", { attrs: { value: "km" } }, [
-                      _vm._v("Kilómetro")
-                    ]),
-                    _vm._v(" "),
-                    _c("option", { attrs: { value: "hm" } }, [
-                      _vm._v("Hectómetro")
-                    ]),
-                    _vm._v(" "),
-                    _c("option", { attrs: { value: "dam" } }, [
-                      _vm._v("Decámetro")
-                    ]),
-                    _vm._v(" "),
                     _c("option", { attrs: { value: "m" } }, [_vm._v("Metro")]),
-                    _vm._v(" "),
-                    _c("option", { attrs: { value: "dm" } }, [
-                      _vm._v("Decimetro")
-                    ]),
                     _vm._v(" "),
                     _c("option", { attrs: { value: "cm" } }, [
                       _vm._v("Centimetro")
