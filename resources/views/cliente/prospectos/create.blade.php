@@ -105,7 +105,7 @@
                     </div>
 				</div>
 			</div>
-			<example-component :animal="{data: this.$refs}" ></example-component>
+			{{-- <example-component :animal="{data: this.$refs}" ></example-component> --}}
 			<mercancias-component></mercancias-component>
 			<servicios-component></servicios-component>
 			<div class="d-flex justify-content-center mb-3">
