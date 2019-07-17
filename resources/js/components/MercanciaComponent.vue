@@ -211,6 +211,27 @@
                     });
                 }
             }
+            else{
+                if(servicio == 'Terrestre FTL' || servicio == 'Terrestre LTL'){
+                    $('input.volumen-alto').each(function(index, el) {
+                        $(el).val(0);
+                        $(el).prop('readonly', false);
+                    });
+                    $('select.volumen-unidad').each(function(index, el) {
+                        $(el).children().eq(1).prop('selected', false)
+                    });
+                }
+                else if (servicio == 'Maritimo FCL' || servicio == 'Maritimo LCL'){
+                    $('input.volumen-alto').each(function(index, el) {
+                        $(el).val(0);
+                        $(el).prop('readonly', false);
+                    });
+                    $('select.volumen-unidad').each(function(index, el) {
+                        $(el).children().eq(2).prop('selected', false)
+                    });
+                }
+
+            }
         }
     });
 
