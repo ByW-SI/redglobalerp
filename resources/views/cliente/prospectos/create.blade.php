@@ -10,7 +10,7 @@
 				@csrf
 				<div class="form-row">
 					<div class="form-group col-4">
-						<label class="control-label"><i class="fas fa-asterisk"></i> Nombre completo del responsable:</label>
+						<label class="control-label"><i class="fas fa-asterisk"></i> Nombre completo del prospecto:</label>
 						<input class="form-control" type="text" name="responsable" required="">
 					</div>
 					<div class="form-group col-4">
@@ -18,15 +18,15 @@
 						<input class="form-control" type="text" name="razon_social" required="">
 					</div>
 					<div class="form-group col-4">
-						<label class="control-label"><i class="fas fa-asterisk"></i> Número telefonico del responsable:</label>
+						<label class="control-label"><i class="fas fa-asterisk"></i> Número telefonico del prospecto:</label>
 						<input class="form-control" type="text" name="telefono" required="">
 					</div>
 					<div class="form-group col-4">
-						<label class="control-label"><i class="fas fa-asterisk"></i> Número de celular del responsable:</label>
+						<label class="control-label"><i class="fas fa-asterisk"></i> Número de celular del prospecto:</label>
 						<input class="form-control" type="text" name="celular" required="">
 					</div>
 					<div class="form-group col-4">
-						<label class="control-label"><i class="fas fa-asterisk"></i> Correo electrónico del responsable:</label>
+						<label class="control-label"><i class="fas fa-asterisk"></i> Correo electrónico del prospecto:</label>
 						<input class="form-control" type="email" name="correo" required="">
 					</div>
 					<div class="col-4 form-group">
@@ -108,6 +108,16 @@
 			{{-- <example-component :animal="{data: this.$refs}" ></example-component> --}}
 			<mercancias-component></mercancias-component>
 			<servicios-component></servicios-component>
+            <div class="card-footer">
+                <div class="form-group col-4">
+                    <label class="control-label"><i class="fas fa-asterisk"></i> Total Volumen:</label>
+                    <input class="form-control" min="0" type="number" name="volumen_total" required="" id="volumen_total">
+                </div>
+                <div class="form-group col-4">
+                    <label class="control-label"><i class="fas fa-asterisk"></i> Total Peso:</label>
+                    <input class="form-control" min="0" type="number" name="peso_total" required="" id="peso_total">
+                </div>
+            </div>
 			<div class="d-flex justify-content-center mb-3">
 				<button type="submit" class="btn btn-success btn-lg" >
 					<strong>

@@ -65,20 +65,20 @@
                             <i class="fas fa-asterisk"></i> Volumen:
                         </label>
                         <div class="input-group mb-3">
-                            <input type="number" step="0.01" min="0.01" required class="form-control volumen-alto" placeholder="alto" aria-label="alto" :name="'alto['+index+']'" v-model="mercancia.alto" aria-describedby="x-addon1">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text" id="x-addon1">x</span>
-                            </div>
-                            <input type="number" step="0.01" min="0.01" required class="form-control" placeholder="ancho" aria-label="ancho" :name="'ancho['+index+']'" v-model="mercancia.ancho" aria-describedby="x-addon2">
+                            <input type="number" step="0.01" min="0.01" required class="form-control" placeholder="largo" aria-label="profundo" :name="'profundo['+index+']'" v-model="mercancia.profundo" aria-describedby="x-addon2">
                             <div class="input-group-prepend">
                                 <span class="input-group-text" id="x-addon2">x</span>
                             </div>
-                            <input type="number" step="0.01" min="0.01" required class="form-control" placeholder="profundidad" aria-label="profundo" :name="'profundo['+index+']'" v-model="mercancia.profundo" aria-describedby="x-addon2">
+                            <input type="number" step="0.01" min="0.01" required class="form-control" placeholder="ancho" aria-label="ancho" :name="'ancho['+index+']'" v-model="mercancia.ancho" aria-describedby="x-addon2">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="x-addon1">x</span>
+                            </div>
+                            <input type="number" step="0.01" min="0.01" required class="form-control volumen-alto" placeholder="alto" aria-label="alto" :name="'alto['+index+']'" v-model="mercancia.alto" aria-describedby="x-addon1">
                         </div>
                     </div>
                     <div class="col-3">
                         <label class="control-label">
-                            <i class="fas fa-asterisk"></i> Unidad:
+                            <i class="fas fa-asterisk"></i> Unidad Volumen:
                         </label>
                         <select class="form-control volumen-unidad" :name="'medidas['+index+']'" v-model="mercancia.medidas" required>
                             <option value="">Seleccione la unidad de medida</option>
@@ -99,7 +99,7 @@
                     </div>
                     <div class="col-3">
                         <label class="control-label">
-                            <i class="fas fa-asterisk"></i> Unidad:
+                            <i class="fas fa-asterisk"></i> Unidad Peso:
                         </label>
                         <select class="form-control mb-3" :name="'medida_peso['+index+']'" v-model="mercancia.medida_peso" required>
                             <option value="">Seleccione la unidad de medida</option>
@@ -164,28 +164,6 @@
         });
         $('input[name=es_estibable]').click(function(event) {
             cambiarAltoVolumen(this);
-            // let servicio = $('#tipo_servicio option:selected').val();
-            // console.log($(this).val());
-            // if($(this).val() == 0){
-            //     if(servicio == 'Terrestre FTL' || servicio == 'Terrestre LTL'){
-            //         $('input.volumen-alto').each(function(index, el) {
-            //             $(el).val(2.60);
-            //             $(el).prop('readonly', true);
-            //         });
-            //         $('select.volumen-unidad').each(function(index, el) {
-            //             $(el).children().eq(1).prop('selected', true)
-            //         });
-            //     }
-            //     else if (servicio == 'Maritimo FCL' || servicio == 'Maritimo LCL'){
-            //         $('input.volumen-alto').each(function(index, el) {
-            //             $(el).val(260);
-            //             $(el).prop('readonly', true);
-            //         });
-            //         $('select.volumen-unidad').each(function(index, el) {
-            //             $(el).children().eq(2).prop('selected', true)
-            //         });
-            //     }
-            // }
         });
 
         function cambiarAltoVolumen(radio) {
@@ -242,6 +220,8 @@
                 commodities:[],
                 servicios:[],
                 tipo: "",
+                volumen_total: 0,
+                peso_total: 0
             }
         },
         watch:{
@@ -249,25 +229,24 @@
               handler: function (val, oldVal) {
                 for (var i = val.length - 1; i >= 0; i--) {
                     if(val[i].alto != "" && val[i].ancho != "" && val[i].profundo != "" ){
-                        val[i].volumen_total = val[i].alto*val[i].ancho*val[i].profundo;
+                        if (val[i].bultos != "")
+                            val[i].volumen_total = val[i].alto*val[i].ancho*val[i].profundo*val[i].bultos;
+                        else
+                            val[i].volumen_total = val[i].alto*val[i].ancho*val[i].profundo;
                     }
                     if (val[i].peso_br) {
                         val[i].peso_total = val[i].peso_br;
                     }
                     if (val[i].tipo_servicio) {
                         // console.log(val[i].tipo_servicio);
-                        this.getServicios($('#tipo_servicio option:selected').val());
+                        //this.getServicios($('#tipo_servicio option:selected').val());
                     }
                 }
+                this.calcularVolumenTotal();
+                this.calcularPesoTotal();
               },
               deep: true
-            },
-            tipo: {
-
-                handler: function (val, oldVal) {
-                    console.log(val);
-                }
-            },    
+            }
         },
         methods:{
             nuevoProducto(){
@@ -296,10 +275,14 @@
                 console.log($('#tipo_servicio option:selected').val());
                 console.log($('input[name=es_estibable]:checked'));
                 this.mercancias.push(producto);
+                this.calcularVolumenTotal();
+                this.calcularPesoTotal();
             },
             removerProducto(index){
                 if(this.mercancias.length > 1){
                     this.mercancias.splice(index,1);
+                    this.calcularVolumenTotal();
+                    this.calcularPesoTotal();
 
                 }
             },
@@ -331,6 +314,23 @@
             },
             eliminarServicio(mercancia,index){
                 mercancia.serv_extra.splice(index,1);
+            },
+            calcularVolumenTotal(){
+                this.volumen_total = 0
+                for (var i = this.mercancias.length - 1; i >= 0; i--) {
+                    if (this.mercancias[i].volumen_total != "")
+                        this.volumen_total += parseFloat(this.mercancias[i].volumen_total);
+                }
+                $('#volumen_total').val(this.volumen_total.toFixed(2));
+            },
+            calcularPesoTotal(){
+                this.peso_total = 0
+                for (var i = this.mercancias.length - 1; i >= 0; i--) {
+                    if (this.mercancias[i].peso_total != "")
+                        this.peso_total += parseFloat(this.mercancias[i].peso_total);
+                }
+                $('#peso_total').val(this.peso_total.toFixed(2));
+                console.log(this.peso_total);
             }
         },
         mounted() {

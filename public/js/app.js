@@ -2607,28 +2607,7 @@ $(document).ready(function ($) {
     cambiarAltoVolumen($('input:radio[name=es_estibable]:checked'));
   });
   $('input[name=es_estibable]').click(function (event) {
-    cambiarAltoVolumen(this); // let servicio = $('#tipo_servicio option:selected').val();
-    // console.log($(this).val());
-    // if($(this).val() == 0){
-    //     if(servicio == 'Terrestre FTL' || servicio == 'Terrestre LTL'){
-    //         $('input.volumen-alto').each(function(index, el) {
-    //             $(el).val(2.60);
-    //             $(el).prop('readonly', true);
-    //         });
-    //         $('select.volumen-unidad').each(function(index, el) {
-    //             $(el).children().eq(1).prop('selected', true)
-    //         });
-    //     }
-    //     else if (servicio == 'Maritimo FCL' || servicio == 'Maritimo LCL'){
-    //         $('input.volumen-alto').each(function(index, el) {
-    //             $(el).val(260);
-    //             $(el).prop('readonly', true);
-    //         });
-    //         $('select.volumen-unidad').each(function(index, el) {
-    //             $(el).children().eq(2).prop('selected', true)
-    //         });
-    //     }
-    // }
+    cambiarAltoVolumen(this);
   });
 
   function cambiarAltoVolumen(radio) {
@@ -2680,7 +2659,9 @@ $(document).ready(function ($) {
       mercancias: [],
       commodities: [],
       servicios: [],
-      tipo: ""
+      tipo: "",
+      volumen_total: 0,
+      peso_total: 0
     };
   },
   watch: {
@@ -2688,25 +2669,22 @@ $(document).ready(function ($) {
       handler: function handler(val, oldVal) {
         for (var i = val.length - 1; i >= 0; i--) {
           if (val[i].alto != "" && val[i].ancho != "" && val[i].profundo != "") {
-            val[i].volumen_total = val[i].alto * val[i].ancho * val[i].profundo;
+            if (val[i].bultos != "") val[i].volumen_total = val[i].alto * val[i].ancho * val[i].profundo * val[i].bultos;else val[i].volumen_total = val[i].alto * val[i].ancho * val[i].profundo;
           }
 
           if (val[i].peso_br) {
             val[i].peso_total = val[i].peso_br;
           }
 
-          if (val[i].tipo_servicio) {
-            // console.log(val[i].tipo_servicio);
-            this.getServicios($('#tipo_servicio option:selected').val());
+          if (val[i].tipo_servicio) {// console.log(val[i].tipo_servicio);
+            //this.getServicios($('#tipo_servicio option:selected').val());
           }
         }
+
+        this.calcularVolumenTotal();
+        this.calcularPesoTotal();
       },
       deep: true
-    },
-    tipo: {
-      handler: function handler(val, oldVal) {
-        console.log(val);
-      }
     }
   },
   methods: {
@@ -2736,10 +2714,14 @@ $(document).ready(function ($) {
       console.log($('#tipo_servicio option:selected').val());
       console.log($('input[name=es_estibable]:checked'));
       this.mercancias.push(producto);
+      this.calcularVolumenTotal();
+      this.calcularPesoTotal();
     },
     removerProducto: function removerProducto(index) {
       if (this.mercancias.length > 1) {
         this.mercancias.splice(index, 1);
+        this.calcularVolumenTotal();
+        this.calcularPesoTotal();
       }
     },
     getCommodities: function getCommodities() {
@@ -2773,6 +2755,25 @@ $(document).ready(function ($) {
     },
     eliminarServicio: function eliminarServicio(mercancia, index) {
       mercancia.serv_extra.splice(index, 1);
+    },
+    calcularVolumenTotal: function calcularVolumenTotal() {
+      this.volumen_total = 0;
+
+      for (var i = this.mercancias.length - 1; i >= 0; i--) {
+        if (this.mercancias[i].volumen_total != "") this.volumen_total += parseFloat(this.mercancias[i].volumen_total);
+      }
+
+      $('#volumen_total').val(this.volumen_total.toFixed(2));
+    },
+    calcularPesoTotal: function calcularPesoTotal() {
+      this.peso_total = 0;
+
+      for (var i = this.mercancias.length - 1; i >= 0; i--) {
+        if (this.mercancias[i].peso_total != "") this.peso_total += parseFloat(this.mercancias[i].peso_total);
+      }
+
+      $('#peso_total').val(this.peso_total.toFixed(2));
+      console.log(this.peso_total);
     }
   },
   mounted: function mounted() {
@@ -39504,28 +39505,28 @@ var render = function() {
                       {
                         name: "model",
                         rawName: "v-model",
-                        value: mercancia.alto,
-                        expression: "mercancia.alto"
+                        value: mercancia.profundo,
+                        expression: "mercancia.profundo"
                       }
                     ],
-                    staticClass: "form-control volumen-alto",
+                    staticClass: "form-control",
                     attrs: {
                       type: "number",
                       step: "0.01",
                       min: "0.01",
                       required: "",
-                      placeholder: "alto",
-                      "aria-label": "alto",
-                      name: "alto[" + index + "]",
-                      "aria-describedby": "x-addon1"
+                      placeholder: "largo",
+                      "aria-label": "profundo",
+                      name: "profundo[" + index + "]",
+                      "aria-describedby": "x-addon2"
                     },
-                    domProps: { value: mercancia.alto },
+                    domProps: { value: mercancia.profundo },
                     on: {
                       input: function($event) {
                         if ($event.target.composing) {
                           return
                         }
-                        _vm.$set(mercancia, "alto", $event.target.value)
+                        _vm.$set(mercancia, "profundo", $event.target.value)
                       }
                     }
                   }),
@@ -39570,28 +39571,28 @@ var render = function() {
                       {
                         name: "model",
                         rawName: "v-model",
-                        value: mercancia.profundo,
-                        expression: "mercancia.profundo"
+                        value: mercancia.alto,
+                        expression: "mercancia.alto"
                       }
                     ],
-                    staticClass: "form-control",
+                    staticClass: "form-control volumen-alto",
                     attrs: {
                       type: "number",
                       step: "0.01",
                       min: "0.01",
                       required: "",
-                      placeholder: "profundidad",
-                      "aria-label": "profundo",
-                      name: "profundo[" + index + "]",
-                      "aria-describedby": "x-addon2"
+                      placeholder: "alto",
+                      "aria-label": "alto",
+                      name: "alto[" + index + "]",
+                      "aria-describedby": "x-addon1"
                     },
-                    domProps: { value: mercancia.profundo },
+                    domProps: { value: mercancia.alto },
                     on: {
                       input: function($event) {
                         if ($event.target.composing) {
                           return
                         }
-                        _vm.$set(mercancia, "profundo", $event.target.value)
+                        _vm.$set(mercancia, "alto", $event.target.value)
                       }
                     }
                   })
@@ -40012,7 +40013,7 @@ var staticRenderFns = [
     return _c("div", { staticClass: "input-group-prepend" }, [
       _c(
         "span",
-        { staticClass: "input-group-text", attrs: { id: "x-addon1" } },
+        { staticClass: "input-group-text", attrs: { id: "x-addon2" } },
         [_vm._v("x")]
       )
     ])
@@ -40024,7 +40025,7 @@ var staticRenderFns = [
     return _c("div", { staticClass: "input-group-prepend" }, [
       _c(
         "span",
-        { staticClass: "input-group-text", attrs: { id: "x-addon2" } },
+        { staticClass: "input-group-text", attrs: { id: "x-addon1" } },
         [_vm._v("x")]
       )
     ])
@@ -40035,7 +40036,7 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("label", { staticClass: "control-label" }, [
       _c("i", { staticClass: "fas fa-asterisk" }),
-      _vm._v(" Unidad:\n                    ")
+      _vm._v(" Unidad Volumen:\n                    ")
     ])
   },
   function() {
@@ -40053,7 +40054,7 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("label", { staticClass: "control-label" }, [
       _c("i", { staticClass: "fas fa-asterisk" }),
-      _vm._v(" Unidad:\n                    ")
+      _vm._v(" Unidad Peso:\n                    ")
     ])
   },
   function() {
@@ -64392,8 +64393,8 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;function _type
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! C:\Users\B&W\Documents\redglobal\redglobalerp\resources\js\app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! C:\Users\B&W\Documents\redglobal\redglobalerp\resources\sass\app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! /home/valerdi/Documentos/trabajo/redglobalerp/resources/js/app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! /home/valerdi/Documentos/trabajo/redglobalerp/resources/sass/app.scss */"./resources/sass/app.scss");
 
 
 /***/ })
