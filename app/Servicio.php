@@ -28,9 +28,9 @@ class Servicio extends Model
      */
     protected $dates = ['deleted_at'];
 
-    public function cotizacions()
+    public function mercancias()
     {
-        return $this->belongsToMany('App\Cotizacion');
+        return $this->belongsToMany('App\Mercancia');
     }
 
 }

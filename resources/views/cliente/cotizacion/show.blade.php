@@ -35,6 +35,81 @@
 						<dd>{{ $cotizacion->correo}}</dd>
 					</div>
 				</div>
+				@if ($cotizacion->peligroso_clase || $cotizacion->peligroso_nu)
+				 	<h4><span class="badge badge-secondary">Clasificado como material peligroso</span></h4>
+				 	<div class="row mt-3">
+				 		@isset ($cotizacion->peligroso_clase)
+					 		<div class="form-group col-sm-3">
+								<label class="control-label" for="identificador">  Clase :</label>
+								<dd>{{ $cotizacion->peligroso_clase}}</dd>	
+							</div>
+				 		@endisset
+				 		
+						@isset ($cotizacion->peligroso_nu)
+							<div class="form-group col-sm-3">
+								<label class="control-label" for="identificador">  
+								NU :</label>
+								<dd>{{ $cotizacion->peligroso_nu}}</dd>	
+							</div>  
+						@endisset
+						
+				 	</div>
+			 	@endif
+			 	<h4><span class="badge badge-secondary">Datos de origen</span></h4>
+			 	<div class="row mt-3">
+			 		<div class="form-group col-sm-3">
+						<label class="control-label" for="identificador">  Linea de origen :</label>
+						<dd>{{ $cotizacion->line1_origen}}</dd>	
+					</div>
+					<div class="form-group col-sm-3">
+						<label class="control-label" for="identificador">  
+						Codigo Postal de origen :</label>
+						<dd>{{ $cotizacion->cp_origen}}</dd>	
+					</div>
+			 	</div>
+			 	<h4><span class="badge badge-secondary">Datos de destino</span></h4>
+			 	<div class="row mt-3">
+			 		<div class="form-group col-sm-3">
+						<label class="control-label" for="identificador">  Linea de destino :</label>
+						<dd>{{ $cotizacion->line1_destino}}</dd>	
+					</div>
+					<div class="form-group col-sm-3">
+						<label class="control-label" for="identificador">  Codigo Postal de destino :</label>
+						<dd>{{ $cotizacion->cp_destino}}</dd>	
+					</div>
+					<div class="form-group col-sm-3">
+						<label class="control-label" for="identificador">eta :</label>
+						<dd>{{$cotizacion->eta}}</dd>	
+					</div>
+					<div class="form-group col-sm-3">
+						<label class="control-label" for="identificador">Requiere despacho aduanal :</label>
+						@if ($cotizacion->despacho_aduanal)
+							<dd>si</dd>
+						@else
+							<dd>no</dd>
+						@endif
+					</div>
+					<div class="form-group col-sm-3">
+						<label class="control-label" for="identificador">¿Es Estibable? :</label>
+						@if ($cotizacion->es_estibable)
+							<dd>si</dd>
+						@else
+							<dd>no</dd>
+						@endif
+					</div>
+					<div class="form-group col-sm-3">
+						<label class="control-label" for="identificador">Tipo de Servicio :</label>
+						<dd>{{ $cotizacion->tipo_servicio}}</dd>	
+					</div>
+					<div class="form-group col-sm-3">
+						<label class="control-label" for="identificador">Peso Total :</label>
+						<dd>{{ $cotizacion->peso_total_cot}}</dd>	
+					</div>
+					<div class="form-group col-sm-3">
+						<label class="control-label" for="identificador">Volumen Total :</label>
+						<dd>{{ $cotizacion->volumen_total_cot}}</dd>	
+					</div>
+			 	</div>
 			</div>
 	</div>
 	<div class="card-header">
@@ -52,70 +127,8 @@
 						<label class="control-label" for="identificador">  Naturaleza :</label>
 						<dd>{{ $valor->naturaleza}}</dd>	
 					</div>
-					<div class="form-group col-sm-3">
-						<label class="control-label" for="identificador">  Servicio :</label>
-						<dd>{{ $valor->tipo_servicio}}</dd>	
-					</div>
 
-			 	</div>
-			 	@if ($valor->peligroso_clase || $valor->peligroso_nu)
-				 	<h4><span class="badge badge-secondary">Clasificado como material peligroso</span></h4>
-				 	<div class="row mt-3">
-				 		@isset ($valor->peligroso_clase)
-					 		<div class="form-group col-sm-3">
-								<label class="control-label" for="identificador">  Clase :</label>
-								<dd>{{ $valor->peligroso_clase}}</dd>	
-							</div>
-				 		@endisset
-				 		
-						@isset ($valor->peligroso_nu)
-							<div class="form-group col-sm-3">
-								<label class="control-label" for="identificador">  
-								NU :</label>
-								<dd>{{ $valor->peligroso_nu}}</dd>	
-							</div>  
-						@endisset
-						
-				 	</div>
-			 	@endif
-			 	
-
-			 	<h4><span class="badge badge-secondary">Datos de origen</span></h4>
-			 	<div class="row mt-3">
-			 		<div class="form-group col-sm-3">
-						<label class="control-label" for="identificador">  Linea de origen :</label>
-						<dd>{{ $valor->line1_origen}}</dd>	
-					</div>
-					<div class="form-group col-sm-3">
-						<label class="control-label" for="identificador">  
-						Codigo Postal de origen :</label>
-						<dd>{{ $valor->cp_origen}}</dd>	
-					</div>
-			 	</div>
-
-			 	<h4><span class="badge badge-secondary">Datos de destino</span></h4>
-			 	<div class="row mt-3">
-			 		<div class="form-group col-sm-3">
-						<label class="control-label" for="identificador">  Linea de destino :</label>
-						<dd>{{ $valor->line1_destino}}</dd>	
-					</div>
-					<div class="form-group col-sm-3">
-						<label class="control-label" for="identificador">  Codigo Postal de destino :</label>
-						<dd>{{ $valor->cp_destino}}</dd>	
-					</div>
-					<div class="form-group col-sm-3">
-						<label class="control-label" for="identificador">eta :</label>
-						<dd>{{$valor->eta}}</dd>	
-					</div>
-					<div class="form-group col-sm-3">
-						<label class="control-label" for="identificador">Requiere despacho aduanal :</label>
-						@if ($valor->despacho_aduanal)
-							<dd>si</dd>
-						@else
-							<dd>no</dd>
-						@endif
-					</div>
-			 	</div>
+			 	</div>	
 
 			 	<h4><span class="badge badge-secondary">Dimensiones y peso de la mercancia</span></h4>
 			 	<div class="row mt-3">
@@ -157,6 +170,17 @@
 						<dd>{{ $valor->observaciones}}</dd>	
 					</div>
 			 	</div>
+			 	<h4><span class="badge badge-secondary">Servicios Extras</span></h4>
+			 	<div class="row">@foreach($valor->servicios as $servicio)
+			 		<div class="form-group col-sm-3">
+			 							<label class="control-label" for="identificador">Nombre :</label>
+			 							<dd>{{ $servicio->nombre}}</dd>	
+			 						</div>
+			 						<div class="form-group col-sm-3">
+			 							<label class="control-label" for="identificador">Comentarios :</label>
+			 							<dd>{{ $servicio->pivot->comentario}}</dd>	
+			 						</div>
+			 		@endforeach</div>
 			 	<hr style="border:solid black 1px">
 		@endforeach
 	</div>

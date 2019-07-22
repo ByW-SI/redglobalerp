@@ -24,6 +24,29 @@
 						<dd>{{ $cotizacion->correo}}</dd>
 					</div>
 				</div>
+				<h4><span class="badge badge-secondary">Datos de origen</span></h4>
+			 	<div class="row mt-3">
+			 		<div class="form-group col-sm-3">
+						<label class="control-label" for="identificador">  Linea de origen :</label>
+						<dd>{{ $cotizacion->line1_origen}}</dd>	
+					</div>
+					<div class="form-group col-sm-3">
+						<label class="control-label" for="identificador">  
+						Codigo Postal de origen :</label>
+						<dd>{{ $cotizacion->cp_origen}}</dd>	
+					</div>
+			 	</div>
+			 	<h4><span class="badge badge-secondary">Datos de destino</span></h4>
+			 	<div class="row mt-3">
+			 		<div class="form-group col-sm-3">
+						<label class="control-label" for="identificador">  Linea de destino :</label>
+						<dd>{{ $cotizacion->line1_destino}}</dd>	
+					</div>
+					<div class="form-group col-sm-3">
+						<label class="control-label" for="identificador">  Codigo Postal de destino :</label>
+						<dd>{{ $cotizacion->cp_destino}}</dd>	
+					</div>
+			 	</div>
 			</div>
 	</div>
 	<div class="card-header">
@@ -47,31 +70,6 @@
 					</div>
 
 			 	</div>
-			 	<h4><span class="badge badge-secondary">Datos de origen</span></h4>
-			 	<div class="row mt-3">
-			 		<div class="form-group col-sm-3">
-						<label class="control-label" for="identificador">  Linea de origen :</label>
-						<dd>{{ $valor->line1_origen}}</dd>	
-					</div>
-					<div class="form-group col-sm-3">
-						<label class="control-label" for="identificador">  
-						Codigo Postal de origen :</label>
-						<dd>{{ $valor->cp_origen}}</dd>	
-					</div>
-			 	</div>
-
-			 	<h4><span class="badge badge-secondary">Datos de destino</span></h4>
-			 	<div class="row mt-3">
-			 		<div class="form-group col-sm-3">
-						<label class="control-label" for="identificador">  Linea de destino :</label>
-						<dd>{{ $valor->line1_destino}}</dd>	
-					</div>
-					<div class="form-group col-sm-3">
-						<label class="control-label" for="identificador">  Codigo Postal de destino :</label>
-						<dd>{{ $valor->cp_destino}}</dd>	
-					</div>
-			 	</div>
-
 			 	<h4><span class="badge badge-secondary">Dimensiones y peso de la mercancia</span></h4>
 			 	<div class="row mt-3">
 			 		<div class="form-group col-sm-3">

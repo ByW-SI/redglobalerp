@@ -13,13 +13,13 @@
 	            </div>
 	        </div>   
 	   </div>
-	   <div class="card-body" v-for="(index,servicio) in serv_extra">
+	   <div class="card-body" v-for="(servicio, index) in serv_extra">
 	        <div class="row">
 	            <div class="col-4 form-group">
 	                <label>
 	                    <i class="fas fa-asterisk"></i> Servicio
 	                </label>
-	                <select class="form-control" :name="'servicios['+index+']'" v-model="servicio.servicio_id">
+	                <select class="form-control" :name="'servicios['+index_mercancia+']['+index+']'" v-model="servicio.servicio_id">
 	                    <option value="">Seleccione el servicio</option>
 	                    <option v-for="serv in servicios" :value="serv.id" title="servicio.descripcion">{{serv.nombre}}</option>
 	                </select>
@@ -28,7 +28,7 @@
 	                <label>
 	                    Comentario
 	                </label>
-	                <textarea class="form-control" :name="'comentario_serv['+index+'][]'" v-model="servicio.comentario"></textarea>
+	                <textarea class="form-control" :name="'comentario_serv['+index_mercancia+']['+index+']'" v-model="servicio.comentario"></textarea>
 	            </div>
 	            <div class="col-2 form-group b-2">
 	                <button class="btn btn-danger" type="button" @click="eliminarServicio(index)"><i class="far fa-times-circle">Eliminar servicio</i></button>
@@ -39,6 +39,9 @@
 </template>
 <script>
 	export default {
+		props: {
+			index_mercancia:0
+		},
         data(){
             return{
                 servicios:[],
@@ -72,7 +75,7 @@
             }
         },
         mounted() {
-            console.log('Component mounted.')
+            console.log('Component Servicio mounted.' + this.index_mercancia);
         }
     }
 </script>

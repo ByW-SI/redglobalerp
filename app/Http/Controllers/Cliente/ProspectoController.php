@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Cliente;
 use App\Cotizacion;
 use App\Mercancia;
 use App\Cliente;
+use App\Servicio;
 use App\Prospecto;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -46,6 +47,7 @@ class ProspectoController extends Controller
      */
     public function store(Request $request)
     {
+        //dd($request->all());
         $cotizacion=new Cotizacion([
                 'responsable'=>$request->responsable,
                 'telefono'=>$request->telefono,
@@ -55,7 +57,10 @@ class ProspectoController extends Controller
                 'line1_destino'=>$request->linea1_destino,                
                 'cp_destino'=>$request->cp_destino,
                 'tipo_servicio'=>$request->tipo_servicio,
-                'eta'=>$request->eta           
+                'eta'=>$request->eta,
+                'peso_total_cot'=>$request->peso_total_cot,
+                'volumen_total_cot'=>$request->volumen_total_cot,
+                'es_estibable'=>$request->es_estibable
             ]);
         $prospecto=new Prospecto([
                 'razon_social'=>$request->razon_social,
@@ -64,7 +69,12 @@ class ProspectoController extends Controller
                 'correo'=>$request->correo
             ]);
         $prospecto->save();
-        $cotizacion->prospecto_id=$prospecto->id;                
+        $cotizacion->prospecto_id=$prospecto->id;
+        if($request->despacho_aduanal) 
+            $cotizacion->despacho_aduanal=true;
+        else
+            $cotizacion->despacho_aduanal=false;
+           
         $cotizacion->save();
         foreach ($request->nombre as $key => $nombre) {
             //dd($request->despacho_aduanal[$key]);
@@ -91,23 +101,13 @@ class ProspectoController extends Controller
                 // 'peligroso_clase'=>$request->peligroso_clase[$key],
                 // 'peligroso_nu'=>$request->peligroso_nu[$key]
             ]);
-            if($request->despacho_aduanal) 
-            {
-                $cotizacion->despacho_aduanal=true;
-            } 
-            else
-            {
-                $cotizacion->despacho_aduanal=false;
-            }
             $mercancia->cotizacion_id=$cotizacion->id;
             $mercancia->save();
-            // $mercancia->nombre = $nombre;
-            // $mercancia->naturaleza = $request->naturaleza[$key];
-            // $mercancia->tipo_servicio=$request->tipo_servicio[$key];
-            // $mercancia->linea1_origen=$request->linea1_origen[$key];
-            // $mercancia->cp_origen = $request->cp_origen[$key];
-            // array_push($cotizacion,$mercancia);
-            // var_dump($nombre);
+            for ($i=0; $i < count($request->servicios[$key]); $i++) {
+                $aux = Servicio::find($request->servicios[$key][$i]);
+                $mercancia->servicios()->attach($aux, ['comentario' => $request->comentario_serv[$key][$i]]);
+            }
+            $mercancia->save();
             
         }
         return $this->index();

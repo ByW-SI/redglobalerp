@@ -10,7 +10,7 @@
                 </div>
             </div>
         </div>
-        <div class="card" v-for="(mercancia,index) in mercancias">
+        <div class="card" v-for="(mercancia, index) in mercancias">
             <div class="card-header">
                 <div class="d-flex bd-highlight">
                     <div class="p-2 w-100 bd-highlight">
@@ -46,14 +46,6 @@
                             <option value="">Seleccione una opción</option>                            
                             <option v-for="commodity in commodities" :value="commodity.nombre" :title="commodity.descripcion">{{commodity.nombre}}</option>
                         </select>
-                    </div>
-                    <div class="col-4 form-group" id="clase_peligrosa" style="display: none">
-                        <label><i class="fas fa-asterisk"></i> Clase</label>
-                        <input type="number" class="form-control" v-model="mercancia.peligroso_clase" :name="'peligroso_clase['+index+']'" max="9" min="1"></input>
-                    </div>
-                    <div class="col-4 form-group" id="nu_peligroso" style="display: none">
-                        <label><i class="fas fa-asterisk"></i> NU</label>
-                        <input type="text" class="form-control" v-model="mercancia.peligroso_nu" :name="'peligroso_nu['+index+']'">
                     </div>
                     <div class="col-12 mb-2">
                         <h4 class="title">
@@ -147,7 +139,9 @@
                         <textarea class="form-control" :name="'observaciones['+index+']'" v-model="mercancia.observaciones"></textarea>
                     </div>
                 </div>
+
             </div>
+            <servicios-component :index_mercancia="index"></servicios-component>
         </div>
     </div>
     </div>
@@ -176,7 +170,8 @@
                         $(el).prop('readonly', true);
                     });
                     $('select.volumen-unidad').each(function(index, el) {
-                        $(el).children().eq(1).prop('selected', true)
+                        $(el).children().eq(1).prop('selected', true);
+                        $(el).prop('disabled', true);
                     });
                 }
                 else if (servicio == 'Maritimo FCL' || servicio == 'Maritimo LCL'){
@@ -185,7 +180,8 @@
                         $(el).prop('readonly', true);
                     });
                     $('select.volumen-unidad').each(function(index, el) {
-                        $(el).children().eq(2).prop('selected', true)
+                        $(el).children().eq(2).prop('selected', true);
+                        $(el).prop('disabled', true);
                     });
                 }
             }
@@ -196,7 +192,8 @@
                         $(el).prop('readonly', false);
                     });
                     $('select.volumen-unidad').each(function(index, el) {
-                        $(el).children().eq(1).prop('selected', false)
+                        $(el).children().eq(1).prop('selected', false);
+                        $(el).prop('disabled', false);
                     });
                 }
                 else if (servicio == 'Maritimo FCL' || servicio == 'Maritimo LCL'){
@@ -205,7 +202,8 @@
                         $(el).prop('readonly', false);
                     });
                     $('select.volumen-unidad').each(function(index, el) {
-                        $(el).children().eq(2).prop('selected', false)
+                        $(el).children().eq(2).prop('selected', false);
+                        $(el).prop('disabled', false);
                     });
                 }
 
@@ -219,7 +217,7 @@
                 mercancias:[],
                 commodities:[],
                 servicios:[],
-                tipo: "",
+                tipo: $('#tipo_servicio option:selected').val(),
                 volumen_total: 0,
                 peso_total: 0
             }
@@ -227,37 +225,82 @@
         watch:{
             mercancias: {
               handler: function (val, oldVal) {
+                let servicio = $('#tipo_servicio option:selected').val();
                 for (var i = val.length - 1; i >= 0; i--) {
-                    if(val[i].alto != "" && val[i].ancho != "" && val[i].profundo != "" ){
-                        if (val[i].bultos != "")
-                            val[i].volumen_total = val[i].alto*val[i].ancho*val[i].profundo*val[i].bultos;
-                        else
-                            val[i].volumen_total = val[i].alto*val[i].ancho*val[i].profundo;
+                    if($('input:radio[name=es_estibable]:checked').val() == 0){
+                        if(servicio == 'Terrestre FTL' || servicio == 'Terrestre LTL'){
+                            $('input.volumen-alto').each(function(index, el) {
+                                val[i].alto = 2.60;
+                                $(el).prop('readonly', true);
+                            });
+                            $('select.volumen-unidad').each(function(index, el) {
+                                $(el).prop('disabled', true);
+                                val[i].medidas = 'm';
+                            });
+                        }
+                        else if (servicio == 'Maritimo FCL' || servicio == 'Maritimo LCL'){
+                            $('input.volumen-alto').each(function(index, el) {
+                                //$(el).val(260);
+                                val[i].alto = 260;
+                                $(el).prop('readonly', true);
+                            });
+                            $('select.volumen-unidad').each(function(index, el) {
+                                $(el).prop('disabled', true);
+                                val[i].medidas = 'cm';
+                            });
+                        }
+                        /****/
+                        if(val[i].ancho != "" && val[i].profundo != "" ){
+                            if (val[i].bultos != "")
+                                val[i].volumen_total = val[i].alto*val[i].ancho*val[i].profundo*val[i].bultos;
+                            else
+                                val[i].volumen_total = val[i].alto*val[i].ancho*val[i].profundo;
+                        }
+                        /******/
                     }
+                    else{
+                        if(val[i].alto != "" && val[i].ancho != "" && val[i].profundo != "" ){
+                            if (val[i].bultos != "")
+                                val[i].volumen_total = val[i].alto*val[i].ancho*val[i].profundo*val[i].bultos;
+                            else
+                                val[i].volumen_total = val[i].alto*val[i].ancho*val[i].profundo;
+                        }
+
+                    }
+                    // cALCULO DEL PESO
                     if (val[i].peso_br) {
-                        val[i].peso_total = val[i].peso_br;
+                        if (val[i].bultos != "")
+                            val[i].peso_total = val[i].peso_br*val[i].bultos;
+                        else
+                            val[i].peso_total = val[i].peso_br;
                     }
                     if (val[i].tipo_servicio) {
                         // console.log(val[i].tipo_servicio);
                         //this.getServicios($('#tipo_servicio option:selected').val());
                     }
                 }
-                this.calcularVolumenTotal();
                 this.calcularPesoTotal();
+                this.calcularVolumenTotal();
               },
               deep: true
+            },
+            tipo: {
+                handler: function(val, oldVal){
+                    console.log('tipo:');
+                    console.log(val);
+                }
             }
         },
         methods:{
             nuevoProducto(){
                 let producto = {
                     nombre:"",
-                    line1_origen:"",
-                    line2_origen:"",
-                    cp_origen:"",
-                    line1_destino:"",
-                    line2_destino:"",
-                    cp_destino:"",
+                    //line1_origen:"",
+                    //line2_origen:"",
+                    //cp_origen:"",
+                    //line1_destino:"",
+                    //line2_destino:"",
+                    //cp_destino:"",
                     naturaleza:"",
                     alto:"",
                     ancho:"",
@@ -275,14 +318,12 @@
                 console.log($('#tipo_servicio option:selected').val());
                 console.log($('input[name=es_estibable]:checked'));
                 this.mercancias.push(producto);
-                this.calcularVolumenTotal();
-                this.calcularPesoTotal();
             },
             removerProducto(index){
                 if(this.mercancias.length > 1){
                     this.mercancias.splice(index,1);
-                    this.calcularVolumenTotal();
                     this.calcularPesoTotal();
+                    this.calcularVolumenTotal();
 
                 }
             },
@@ -316,11 +357,44 @@
                 mercancia.serv_extra.splice(index,1);
             },
             calcularVolumenTotal(){
+                /*Puntos a considerar al realizar la sumatoria de VOLUMEN TOTAL
+
+                a) Si es servicio LTL .- se suman todos los volúmenes que se dieron de alta y se multiplica el total por un 
+                    factor de 350 . El resultado se compara contra el resultado de PESO TOTAL, y se elige la que sea mayor.
+                b) Si es servicio LCL.-  Se suman todos los volúmenes que se dieron de alta y se multiplica el total por un 
+                    factor de un millón. El resultado se compara contra el resultado de PESO TOTAL, y se elige la que sea mayor.
+                c) Si es servicio AEREO.- Se suman todos los volúmenes que se dieron de alta y el total se divide entre un 
+                    factor de 6,000. El resultado se compara contra el resultado de PESO TOTAL, y se elige la que sea mayor.
+                d) Si el servicio empieza con F (FTL y FCL) .- NO aplica la multiplicación ni división para el peso volumétrico, 
+                    ese se queda tal cual*/
+
                 this.volumen_total = 0
+                let tipoServicio = $('#tipo_servicio option:selected').val();
+
                 for (var i = this.mercancias.length - 1; i >= 0; i--) {
                     if (this.mercancias[i].volumen_total != "")
                         this.volumen_total += parseFloat(this.mercancias[i].volumen_total);
                 }
+
+                if (tipoServicio != '') {
+                    if (tipoServicio.includes('LTL')) {
+                        this.volumen_total *= 350;
+                        this.volumen_total = Math.max(this.volumen_total, parseFloat($('#peso_total').val() ));
+                    }
+
+                    else if(tipoServicio.includes('LCL')){
+                        this.volumen_total *= 1000000;
+                        this.volumen_total = Math.max(this.volumen_total, parseFloat($('#peso_total').val() ));
+                    }
+                    
+                    else if(tipoServicio.includes('Aereo')){
+                        this.volumen_total /= 6000;
+                        this.volumen_total = Math.max(this.volumen_total, parseFloat($('#peso_total').val() ));
+                    }
+                    
+                }
+                else
+                    console.log('Si esta vacio');
                 $('#volumen_total').val(this.volumen_total.toFixed(2));
             },
             calcularPesoTotal(){

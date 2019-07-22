@@ -18,7 +18,7 @@ class Cotizacion extends Model
     	'correo',
         //añadido
         'folio_consecutivo',        
-        'prospecto_id',
+        'prospecto_id',//****
         'line1_origen',
         'cp_origen',
         'line1_destino',
@@ -28,7 +28,9 @@ class Cotizacion extends Model
         'despacho_aduanal',
         'es_estibable',
         'peligroso_clase',
-        'peligroso_nu'
+        'peligroso_nu',
+        'peso_total_cot',
+        'volumen_total_cot'
     ];
     protected $hidden = ['created_at', 'updated_at'];
     /**
@@ -57,9 +59,7 @@ class Cotizacion extends Model
     {
         return $this->hasMany('App\Mercancia');
     }
-    public function servicios (){
-        return $this->belongsToMany('App\Servicio');
-    }
+    
 
     
 }

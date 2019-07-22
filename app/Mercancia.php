@@ -49,5 +49,9 @@ class Mercancia extends Model
     {
         return $this->belongsTo('App\Cotizacion');
     }
+
+    public function servicios (){
+        return $this->belongsToMany('App\Servicio');
+    }
     
 }

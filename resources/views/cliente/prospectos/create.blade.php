@@ -107,15 +107,14 @@
 			</div>
 			{{-- <example-component :animal="{data: this.$refs}" ></example-component> --}}
 			<mercancias-component></mercancias-component>
-			<servicios-component></servicios-component>
             <div class="card-footer">
                 <div class="form-group col-4">
                     <label class="control-label"><i class="fas fa-asterisk"></i> Total Volumen:</label>
-                    <input class="form-control" min="0" type="number" name="volumen_total" required="" id="volumen_total">
+                    <input class="form-control" min="0" type="number" name="volumen_total_cot" required="" id="volumen_total">
                 </div>
                 <div class="form-group col-4">
                     <label class="control-label"><i class="fas fa-asterisk"></i> Total Peso:</label>
-                    <input class="form-control" min="0" type="number" name="peso_total" required="" id="peso_total">
+                    <input class="form-control" min="0" type="number" name="peso_total_cot" required="" id="peso_total">
                 </div>
             </div>
 			<div class="d-flex justify-content-center mb-3">
