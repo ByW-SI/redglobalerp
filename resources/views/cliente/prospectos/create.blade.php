@@ -33,7 +33,7 @@
                         <label>
                             <i class="fas fa-asterisk"></i> Tipo de servicio:
                         </label>
-                        <select  class="form-control" id="tipo_servicio" name="tipo_servicio" required ref="selectServicio">
+                        <select  class="form-control" id="tipo_servicio" name="tipo_servicio" required="" ref="selectServicio">
                             <option value="">Seleccione una opción</option>
                             <option value="Terrestre FTL">Terrestre FTL</option>
                             <option value="Terrestre LTL">Terrestre LTL</option>
@@ -95,7 +95,7 @@
                     <div class="col-4 form-group" id="estibable">
                         <label><i class="fas fa-question-circle"></i>¿Es estibable?</label>
                         <div class="form-check form-check-inline">
-						  <input class="form-check-input" type="radio" id="inlineCheckboxSI" name="es_estibable" value="1" disabled="">
+						  <input class="form-check-input" type="radio" id="inlineCheckboxSI" name="es_estibable" value="1" disabled="" required="">
 						  <label class="form-check-label" for="inlineCheckboxSI">Si</label>
 						</div>
 						<div class="form-check form-check-inline disabled">
@@ -110,11 +110,11 @@
             <div class="card-footer">
                 <div class="form-group col-4">
                     <label class="control-label"><i class="fas fa-asterisk"></i> Total Volumen:</label>
-                    <input class="form-control" min="0" type="number" name="volumen_total_cot" required="" id="volumen_total">
+                    <input class="form-control" step="0.01" min="0" type="number" name="volumen_total_cot" required="" id="volumen_total">
                 </div>
                 <div class="form-group col-4">
                     <label class="control-label"><i class="fas fa-asterisk"></i> Total Peso:</label>
-                    <input class="form-control" min="0" type="number" name="peso_total_cot" required="" id="peso_total">
+                    <input class="form-control" step="0.01" min="0" type="number" name="peso_total_cot" required="" id="peso_total">
                 </div>
             </div>
 			<div class="d-flex justify-content-center mb-3">

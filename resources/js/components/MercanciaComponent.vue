@@ -108,12 +108,12 @@
                         <label class="control-label">
                             <i class="fas fa-asterisk"></i> Número de bultos:
                         </label>
-                        <input type="number" step="0.1" min="0.1" class="form-control" :name="'bultos['+index+']'" v-model="mercancia.bultos" required>
+                        <input type="number" step="0.01" min="0.01" class="form-control" :name="'bultos['+index+']'" v-model="mercancia.bultos" required>
                     </div>
                     <div class="col-2">
                         <label><i class="fas fa-asterisk"></i> Peso Total:</label>
                         <div class="input-group mb-3">
-                            <input type="number" step="0.1" min="0.1"  class="form-control" :name="'peso_total['+index+']'" v-model="mercancia.peso_total" required>
+                            <input type="number" step="0.01" min="0.01"  class="form-control" :name="'peso_total['+index+']'" v-model="mercancia.peso_total" required>
                             <div class="input-group-append">
                                 <span class="input-group-text" id="basic-addon2">{{mercancia.medida_peso}}</span>
                             </div>
@@ -123,7 +123,7 @@
                     <div class="col-2">
                         <label><i class="fas fa-asterisk"></i> Volumen Total:</label>
                         <div class="input-group mb-3">
-                             <input type="number" step="0.1" min="0.1"  class="form-control" :name="'volumen_total['+index+']'" v-model="mercancia.volumen_total"  aria-describedby="basic-addon2" required>
+                             <input type="number" step="0.01" min="0.01"  class="form-control" :name="'volumen_total['+index+']'" v-model="mercancia.volumen_total"  aria-describedby="basic-addon2" required>
                             <div class="input-group-append">
                                 <span class="input-group-text" id="basic-addon2">{{mercancia.medidas == "" ? mercancia.medidas : mercancia.medidas+"³" }}</span>
                             </div>
@@ -252,9 +252,10 @@
                         /****/
                         if(val[i].ancho != "" && val[i].profundo != "" ){
                             if (val[i].bultos != "")
-                                val[i].volumen_total = val[i].alto*val[i].ancho*val[i].profundo*val[i].bultos;
+                                val[i].volumen_total = (val[i].alto*val[i].ancho*val[i].profundo*val[i].bultos).toFixed(2);
                             else
                                 val[i].volumen_total = val[i].alto*val[i].ancho*val[i].profundo;
+                            val[i].volumen_total = val[i].volumen_total.toFixed(2);
                         }
                         /******/
                     }
@@ -263,7 +264,7 @@
                             if (val[i].bultos != "")
                                 val[i].volumen_total = val[i].alto*val[i].ancho*val[i].profundo*val[i].bultos;
                             else
-                                val[i].volumen_total = val[i].alto*val[i].ancho*val[i].profundo;
+                                val[i].volumen_total = (val[i].alto*val[i].ancho*val[i].profundo).toFixed(2);
                         }
 
                     }
@@ -359,26 +360,26 @@
                     if (this.mercancias[i].volumen_total != "")
                         this.volumen_total += parseFloat(this.mercancias[i].volumen_total);
                 }
+                // ESTO SE VA A CAMBIAR PARA EL INPUT DE PESO VOLUMETRICO TOTAL
+                // if (tipoServicio != '') {
+                //     if (tipoServicio.includes('LTL')) {
+                //         this.volumen_total *= 350;
+                //         this.volumen_total = Math.max(this.volumen_total, parseFloat($('#peso_total').val() ));
+                //     }
 
-                if (tipoServicio != '') {
-                    if (tipoServicio.includes('LTL')) {
-                        this.volumen_total *= 350;
-                        this.volumen_total = Math.max(this.volumen_total, parseFloat($('#peso_total').val() ));
-                    }
-
-                    else if(tipoServicio.includes('LCL')){
-                        this.volumen_total *= 1000000;
-                        this.volumen_total = Math.max(this.volumen_total, parseFloat($('#peso_total').val() ));
-                    }
+                //     else if(tipoServicio.includes('LCL')){
+                //         this.volumen_total *= 1000000;
+                //         this.volumen_total = Math.max(this.volumen_total, parseFloat($('#peso_total').val() ));
+                //     }
                     
-                    else if(tipoServicio.includes('Aereo')){
-                        this.volumen_total /= 6000;
-                        this.volumen_total = Math.max(this.volumen_total, parseFloat($('#peso_total').val() ));
-                    }
+                //     else if(tipoServicio.includes('Aereo')){
+                //         this.volumen_total /= 6000;
+                //         this.volumen_total = Math.max(this.volumen_total, parseFloat($('#peso_total').val() ));
+                //     }
                     
-                }
-                else
-                    console.log('Si esta vacio');
+                // }
+                // else
+                //     console.log('Si esta vacio');
                 $('#volumen_total').val(this.volumen_total.toFixed(2));
             },
             calcularPesoTotal(){

@@ -4,12 +4,14 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Kyslik\ColumnSortable\Sortable;
 
 
 class Cotizacion extends Model
 {
     //
     use SoftDeletes;
+    use Sortable;
 
     protected $fillable=[
     	'nombre',
@@ -32,6 +34,14 @@ class Cotizacion extends Model
         'peso_total_cot',
         'volumen_total_cot'
     ];
+
+    public $sortable = [
+        'razon_social',
+        'telefono',
+        'celular',
+        'correo',
+    ];
+
     protected $hidden = ['created_at', 'updated_at'];
     /**
      * The attributes that should be mutated to dates.
