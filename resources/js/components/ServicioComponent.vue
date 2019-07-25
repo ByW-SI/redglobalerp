@@ -55,7 +55,7 @@
             getServicios(){
             	let servicio = $("#tipo_servicio").val(); 
                 //let url=`/RGC/public/getServicios/${servicio}`;
-                let url=`/getServicios/${servicio}`;
+                let url=`/rgc/getServicios/${servicio}`;
                 axios.get(url).then(res=>{
                     this.servicios=res.data.servicios;
                 }).catch(err=>{

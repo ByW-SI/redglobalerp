@@ -150,7 +150,7 @@ Route::get('{proyecto}/aereo','Tarifas\AereoController@create')->name('proyectos
 Route::get('{proyecto}/terrestre','Tarifas\TerrestreController@create')->name('proyectos.terrestres.create');
 //	ajax
 Route::get('buscarDL/{datoslab}','Empleado\EmpleadoDatosLabController@show'); 
-Route::get('getCommodities','Precargas\CommodityController@getCommodities');
+Route::get('/getCommodities','Precargas\CommodityController@getCommodities');
 Route::get('getServicios/{servicio}','Precargas\ServiciosController@getServicios');
 // PRECARGAS
 Route::resource('puestos','Precargas\TipoPuestoController');

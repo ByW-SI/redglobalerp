@@ -329,29 +329,13 @@
             },
             getCommodities(){
 
-                let url = "/getCommodities";
+                let url = "/rgc/getCommodities";
                 //let url = "/getCommodities";
                 axios.get(url).then(res=>{
                     this.commodities = res.data.commodities;
                 }).catch(err=>{
                     console.log('err',err);
                 });
-            },
-            getServicios(servicio){
-                let url=`/getServicios/${servicio}`;
-                 //let url=`/getServicios/${servicio}`;
-                axios.get(url).then(res=>{
-                    this.servicios=res.data.servicios;
-                }).catch(err=>{
-                    console.log('err',err);
-                });
-            },
-            nuevoServicio(mercancia){
-                let serv = {
-                    servicio_id:"",
-                    comentario:"",   
-                };
-                mercancia.serv_extra.push(serv);
             },
             eliminarServicio(mercancia,index){
                 mercancia.serv_extra.splice(index,1);
