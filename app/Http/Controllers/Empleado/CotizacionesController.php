@@ -98,4 +98,23 @@ class CotizacionesController extends Controller
     {
         //
     }
+
+    public function buscarCotizaciones(Request $request)
+    {
+        //dd($request);
+        $query = $request->input('query');
+        //dd($query);
+        $wordsquery = explode(' ',$query);
+        $cotizaciones = Cotizacion::where(function($q) use($wordsquery){
+            foreach ($wordsquery as $word) {
+                $q->orWhere('nombre', 'LIKE', "%$word%")
+                    ->orWhere('responsable', 'LIKE', "%$word%")
+                    ->orWhere('id', 'LIKE', "%$word%")
+                    ->orWhere('telefono', 'LIKE', "%$word%")
+                    ->orWhere('correo', 'LIKE', "%$word%");
+            }
+        })->sortable()->paginate(10);//->whereMonth('created_at', date("m"))->sortable()->paginate(10);  
+        $cotizaciones->withPath('producto?query=' . $query);
+        return view('empleado.cotizaciones.index', ['cotizaciones' => $cotizaciones]);
+    }
 }

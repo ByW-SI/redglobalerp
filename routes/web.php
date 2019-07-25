@@ -166,3 +166,7 @@ Route::resource('amonestacion','Precargas\TipoAmonestacionController');
 
 // OFICINAS
 Route::resource('oficinas', 'Oficina\OficinaController');
+
+// BUSQUEDAS
+Route::get('getProspectos', 'Cliente\ProspectoController@buscarProspectos');
+Route::get('getCotizaciones', 'Empleado\CotizacionesController@buscarCotizaciones');

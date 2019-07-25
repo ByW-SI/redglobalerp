@@ -356,4 +356,22 @@ class ProspectoController extends Controller
     {
         
     }
+
+    public function buscarProspectos(Request $request)
+    {
+        //dd($request);
+        $query = $request->input('query');
+        //dd($query);
+        $wordsquery = explode(' ',$query);
+        $prospectos = Prospecto::where(function($q) use($wordsquery){
+            foreach ($wordsquery as $word) {
+                $q->orWhere('razon_social', 'LIKE', "%$word%")
+                    ->orWhere('telefono', 'LIKE', "%$word%")
+                    ->orWhere('correo', 'LIKE', "%$word%")
+                    ->orWhere('celular', 'LIKE', "%$word%");
+            }
+        })->sortable()->paginate(10);//->whereMonth('created_at', date("m"))->sortable()->paginate(10);  
+        $prospectos->withPath('producto?query=' . $query);
+        return view('cliente.prospectos.index', ['prospectos' => $prospectos]);
+    }
 }
