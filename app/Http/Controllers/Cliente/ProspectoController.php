@@ -103,9 +103,11 @@ class ProspectoController extends Controller
             ]);
             $mercancia->cotizacion_id=$cotizacion->id;
             $mercancia->save();
-            for ($i=0; $i < count($request->servicios[$key]); $i++) {
-                $aux = Servicio::find($request->servicios[$key][$i]);
-                $mercancia->servicios()->attach($aux, ['comentario' => $request->comentario_serv[$key][$i]]);
+            if (isset($request->servicio)) {
+                for ($i=0; $i < count($request->servicios[$key]); $i++) {
+                    $aux = Servicio::find($request->servicios[$key][$i]);
+                    $mercancia->servicios()->attach($aux, ['comentario' => $request->comentario_serv[$key][$i]]);
+                }
             }
             $mercancia->save();
             
