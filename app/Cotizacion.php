@@ -33,7 +33,10 @@ class Cotizacion extends Model
         'peligroso_nu',
         'peso_total_cot',
         'volumen_total_cot',
-        'tipo_despacho'
+        'tipo_despacho',
+        'custodia_desde',
+        'custodia_hasta',
+        'observaciones'
     ];
 
     public $sortable = [
@@ -71,6 +74,9 @@ class Cotizacion extends Model
         return $this->hasMany('App\Mercancia');
     }
     
+    public function cotizacionFcl(){
+        return $this->hasOne('App\CotizacionFcl');
+    }
 
     
 }

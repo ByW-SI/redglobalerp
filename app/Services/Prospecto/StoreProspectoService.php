@@ -3,6 +3,8 @@
 namespace App\Services\Prospecto;
 
 use App\Cotizacion;
+use App\CotizacionFcl;
+use App\CotizacionFtl;
 use App\Mercancia;
 use App\Prospecto;
 use App\Servicio;
@@ -10,10 +12,15 @@ use Illuminate\Http\Request;
 
 class StoreProspectoService
 {
+
+    protected $prospecto;
+
     public function __construct(Request $request)
     {
 
-        // dd($request->input());
+        // dd($request->input('observaciones_servicio'));
+
+        $this->crearProspecto($request);
 
         $cotizacion = new Cotizacion([
             'responsable' => $request->responsable,
@@ -29,21 +36,39 @@ class StoreProspectoService
             'volumen_total_cot' => $request->volumen_total_cot,
             'es_estibable' => $request->es_estibable,
             'tipo_despacho' => $this->getTipoDespacho($request),
+            'custodia_desde' => $request->custodia_desde,
+            'custodia_hasta' => $request->custodia_hasta,
+            'observaciones' => $request->observaciones_servicio,
         ]);
-        $prospecto = new Prospecto([
-            'razon_social' => $request->razon_social,
-            'telefono' => $request->telefono,
-            'celular' => $request->celular,
-            'correo' => $request->correo
-        ]);
-        $prospecto->save();
-        $cotizacion->prospecto_id = $prospecto->id;
+        $cotizacion->prospecto_id = $this->prospecto->id;
         if ($request->despacho_aduanal)
             $cotizacion->despacho_aduanal = true;
         else
             $cotizacion->despacho_aduanal = false;
 
         $cotizacion->save();
+
+        if($request->tipo_servicio == 'Terrestre FTL'){
+
+            CotizacionFtl::create([
+                'cotizacion_id' => $cotizacion->id,
+                'tipo_unidad' => $request->tipo_unidad,
+                'unidad' => $request->unidad,
+                'es_sobredimensionado' => $request->es_sobredimensionado,
+                'capacidad_refrigerante' => $request->capacidad_refrigerante,
+                'temperatura' => $request->temperatura,
+            ]);
+        }
+
+        if($request->tipo_servicio == 'Maritimo FCL'){
+
+            CotizacionFcl::create([
+                'cotizacion_id' => $cotizacion->id,
+                'contenedor_maritimo' => $request->contenedor_maritimo,
+            ]);
+
+        }
+
         foreach ($request->nombre as $key => $nombre) {
             //dd($request->despacho_aduanal[$key]);
             $mercancia = new Mercancia([
@@ -81,19 +106,29 @@ class StoreProspectoService
         }
     }
 
-    public function getTipoDespacho($request){
+    protected function crearProspecto($request)
+    {
+        $this->prospecto = Prospecto::create([
+            'razon_social' => $request->razon_social,
+            'telefono' => $request->telefono,
+            'celular' => $request->celular,
+            'correo' => $request->correo
+        ]);
+    }
 
-        if($request->despacho_importacion && $request->despacho_exportacion){
+    public function getTipoDespacho($request)
+    {
+
+        if ($request->despacho_importacion && $request->despacho_exportacion) {
             return 'importacion y exportacion';
         }
 
-        if($request->despacho_importacion){
+        if ($request->despacho_importacion) {
             return 'importacion';
         }
 
-        if($request->despacho_exportacion){
+        if ($request->despacho_exportacion) {
             return 'exportacion';
         }
-
     }
 }
