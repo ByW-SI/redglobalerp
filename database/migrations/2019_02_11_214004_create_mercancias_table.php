@@ -19,11 +19,11 @@ class CreateMercanciasTable extends Migration
             $table->unsignedInteger('cotizacion_id');
             $table->foreign('cotizacion_id')->references('id')->on('cotizacions');
             // DIRECCION ORIGEN
-            // $table->text('line1_origen');
-            // $table->string('cp_origen');
+            $table->text('line1_origen');
+            $table->string('cp_origen');
             // // DIRECCION DESTINO
-            // $table->text('line1_destino');
-            // $table->string('cp_destino');
+            $table->text('line1_destino');
+            $table->string('cp_destino');
             // Naturaleza
             $table->string('naturaleza');
             // DIMENSIONES
@@ -38,7 +38,7 @@ class CreateMercanciasTable extends Migration
             $table->decimal('peso_total',8,2);
             $table->decimal('volumen_total',8,2);
             // // TIPO DE SERVICIO
-            // $table->string('tipo_servicio');
+            $table->string('tipo_servicio');
             // OBSERVACIONES
             $table->text('observaciones')->nullable();
             $table->timestamps();

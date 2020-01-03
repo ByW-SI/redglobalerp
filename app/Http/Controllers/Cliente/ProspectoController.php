@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Cliente;
+
 use App\Cotizacion;
 use App\Mercancia;
 use App\Cliente;
@@ -8,6 +9,7 @@ use App\Servicio;
 use App\Prospecto;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Services\Prospecto\StoreProspectoService;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Storage;
 
@@ -20,8 +22,8 @@ class ProspectoController extends Controller
      */
     public function index()
     {
-        $prospectos=Prospecto::paginate(10);
-        return view('cliente.prospectos.index',['prospectos'=>$prospectos]);
+        $prospectos = Prospecto::paginate(10);
+        return view('cliente.prospectos.index', ['prospectos' => $prospectos]);
     }
 
     /**
@@ -35,8 +37,8 @@ class ProspectoController extends Controller
     }
 
     public function addCotizacion(Prospecto $prospecto)
-    {        
-        return view('cliente.prospectos.add',['prospecto'=>$prospecto]);
+    {
+        return view('cliente.prospectos.add', ['prospecto' => $prospecto]);
     }
 
     /**
@@ -47,122 +49,55 @@ class ProspectoController extends Controller
      */
     public function store(Request $request)
     {
-        //dd($request->all());
-        $cotizacion=new Cotizacion([
-                'responsable'=>$request->responsable,
-                'telefono'=>$request->telefono,
-                'correo'=>$request->correo,
-                 'line1_origen'=>$request->linea1_origen,                
-                'cp_origen'=>$request->cp_origen,
-                'line1_destino'=>$request->linea1_destino,                
-                'cp_destino'=>$request->cp_destino,
-                'tipo_servicio'=>$request->tipo_servicio,
-                'eta'=>$request->eta,
-                'peso_total_cot'=>$request->peso_total_cot,
-                'volumen_total_cot'=>$request->volumen_total_cot,
-                'es_estibable'=>$request->es_estibable
-            ]);
-        $prospecto=new Prospecto([
-                'razon_social'=>$request->razon_social,
-                'telefono'=>$request->telefono,
-                'celular'=>$request->celular,
-                'correo'=>$request->correo
-            ]);
-        $prospecto->save();
-        $cotizacion->prospecto_id=$prospecto->id;
-        if($request->despacho_aduanal) 
-            $cotizacion->despacho_aduanal=true;
-        else
-            $cotizacion->despacho_aduanal=false;
-           
-        $cotizacion->save();
-        foreach ($request->nombre as $key => $nombre) {
-            //dd($request->despacho_aduanal[$key]);
-            $mercancia= new Mercancia([
-
-                'nombre'=>$nombre,
-                // 'line1_origen'=>$request->linea1_origen[$key],                
-                // 'cp_origen'=>$request->cp_origen[$key],
-                // 'line1_destino'=>$request->linea1_destino[$key],                
-                // 'cp_destino'=>$request->cp_destino[$key],
-                'naturaleza'=>$request->naturaleza[$key],
-                'alto'=>$request->alto[$key],
-                'ancho'=>$request->ancho[$key],
-                'profundo'=>$request->profundo[$key],
-                'medidas'=>$request->medidas[$key],
-                'peso_br'=>$request->peso_br[$key],
-                'medida_peso'=>$request->medida_peso[$key],
-                'bultos'=>$request->bultos[$key],
-                'peso_total'=>$request->peso_total[$key],
-                'volumen_total'=>$request->volumen_total[$key],
-                // 'tipo_servicio'=>$request->tipo_servicio[$key],
-                'observaciones'=>$request->observaciones[$key],
-                // 'eta'=>$request->eta[$key],
-                // 'peligroso_clase'=>$request->peligroso_clase[$key],
-                // 'peligroso_nu'=>$request->peligroso_nu[$key]
-            ]);
-            $mercancia->cotizacion_id=$cotizacion->id;
-            $mercancia->save();
-            if (isset($request->servicio)) {
-                for ($i=0; $i < count($request->servicios[$key]); $i++) {
-                    $aux = Servicio::find($request->servicios[$key][$i]);
-                    $mercancia->servicios()->attach($aux, ['comentario' => $request->comentario_serv[$key][$i]]);
-                }
-            }
-            $mercancia->save();
-            
-        }
+        $storeProspectoService =  new StoreProspectoService($request);
         return $this->index();
     }
 
-    public function pushCotizacion(Request $request,Prospecto $prospecto)
-    {        
-        $cotizacion=new Cotizacion([
-                'responsable'=>$request->responsable,
-                'telefono'=>$request->telefono,
-                'correo'=>$request->correo,
-                 'line1_origen'=>$request->linea1_origen,                
-                'cp_origen'=>$request->cp_origen,
-                'line1_destino'=>$request->linea1_destino,                
-                'cp_destino'=>$request->cp_destino,
-                'tipo_servicio'=>$request->tipo_servicio,
-                'eta'=>$request->eta
+    public function pushCotizacion(Request $request, Prospecto $prospecto)
+    {
+        $cotizacion = new Cotizacion([
+            'responsable' => $request->responsable,
+            'telefono' => $request->telefono,
+            'correo' => $request->correo,
+            'line1_origen' => $request->linea1_origen,
+            'cp_origen' => $request->cp_origen,
+            'line1_destino' => $request->linea1_destino,
+            'cp_destino' => $request->cp_destino,
+            'tipo_servicio' => $request->tipo_servicio,
+            'eta' => $request->eta
 
-            ]);
-        $cotizacion->prospecto_id=$prospecto->id;                
+        ]);
+        $cotizacion->prospecto_id = $prospecto->id;
         $cotizacion->save();
         foreach ($request->nombre as $key => $nombre) {
             //dd($request->despacho_aduanal[$key]);
-            $mercancia= new Mercancia([
+            $mercancia = new Mercancia([
 
-                'nombre'=>$nombre,
+                'nombre' => $nombre,
                 // 'line1_origen'=>$request->linea1_origen[$key],                
                 // 'cp_origen'=>$request->cp_origen[$key],
                 // 'line1_destino'=>$request->linea1_destino[$key],                
                 // 'cp_destino'=>$request->cp_destino[$key],
-                'naturaleza'=>$request->naturaleza[$key],
-                'alto'=>$request->alto[$key],
-                'ancho'=>$request->ancho[$key],
-                'profundo'=>$request->profundo[$key],
-                'medidas'=>$request->medidas[$key],
-                'peso_br'=>$request->peso_br[$key],
-                'medida_peso'=>$request->medida_peso[$key],
-                'bultos'=>$request->bultos[$key],
-                'peso_total'=>$request->peso_total[$key],
-                'volumen_total'=>$request->volumen_total[$key],
+                'naturaleza' => $request->naturaleza[$key],
+                'alto' => $request->alto[$key],
+                'ancho' => $request->ancho[$key],
+                'profundo' => $request->profundo[$key],
+                'medidas' => $request->medidas[$key],
+                'peso_br' => $request->peso_br[$key],
+                'medida_peso' => $request->medida_peso[$key],
+                'bultos' => $request->bultos[$key],
+                'peso_total' => $request->peso_total[$key],
+                'volumen_total' => $request->volumen_total[$key],
                 // 'tipo_servicio'=>$request->tipo_servicio[$key],
-                'observaciones'=>$request->observaciones[$key],
+                'observaciones' => $request->observaciones[$key],
                 // 'eta'=>$request->eta[$key]
             ]);
-            if($request->despacho_aduanal[$key]) 
-            {
-                $mercancia->despacho_aduanal=true;
-            } 
-            else
-            {
-                $mercancia->despacho_aduanal=false;
+            if ($request->despacho_aduanal[$key]) {
+                $mercancia->despacho_aduanal = true;
+            } else {
+                $mercancia->despacho_aduanal = false;
             }
-            $mercancia->cotizacion_id=$cotizacion->id;
+            $mercancia->cotizacion_id = $cotizacion->id;
             $mercancia->save();
         }
 
@@ -176,15 +111,15 @@ class ProspectoController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show($id)
-    {        
-        $prospecto=Prospecto::find($id);
+    {
+        $prospecto = Prospecto::find($id);
         //dd($prospecto);        
-        return view('cliente.cotizacion.index',['cotizaciones'=>$prospecto->cotizacions,'prospecto'=>$prospecto]);
+        return view('cliente.cotizacion.index', ['cotizaciones' => $prospecto->cotizacions, 'prospecto' => $prospecto]);
     }
 
     public function showCotizacion(Prospecto $prospecto, Cotizacion $cotizacion)
     {
-         return view('cliente.cotizacion.show',['cotizacion'=>$cotizacion]);
+        return view('cliente.cotizacion.show', ['cotizacion' => $cotizacion]);
     }
 
     /**
@@ -195,14 +130,14 @@ class ProspectoController extends Controller
      */
     public function edit($id)
     {
-        $cotizacion=Cotizacion::find($id);
-        return view('cliente.prospectos.edit',['cotizacion'=>$cotizacion]);
+        $cotizacion = Cotizacion::find($id);
+        return view('cliente.prospectos.edit', ['cotizacion' => $cotizacion]);
         dd($cotizacion);
     }
 
     public function editCotizacion(Prospecto $prospecto, Cotizacion $cotizacion)
-    {        
-        return view('cliente.prospectos.edit',['cotizacion'=>$cotizacion]);
+    {
+        return view('cliente.prospectos.edit', ['cotizacion' => $cotizacion]);
     }
 
     /**
@@ -217,81 +152,72 @@ class ProspectoController extends Controller
         //
     }
 
-    public function updateCotizacion(Request $request,Cotizacion $cotizacion)
+    public function updateCotizacion(Request $request, Cotizacion $cotizacion)
     {
-        $cotizacion_nueva=new Cotizacion([
-                'responsable'=>$request->responsable,
-                'telefono'=>$request->telefono,
-                'correo'=>$request->correo                
-            ]);
-        $cotizacion_nueva->prospecto_id=$cotizacion->prospecto_id;        
-        $cotizacion_nueva->folio_consecutivo=$this->Folio($cotizacion->folio_consecutivo,$cotizacion->id);        
+        $cotizacion_nueva = new Cotizacion([
+            'responsable' => $request->responsable,
+            'telefono' => $request->telefono,
+            'correo' => $request->correo
+        ]);
+        $cotizacion_nueva->prospecto_id = $cotizacion->prospecto_id;
+        $cotizacion_nueva->folio_consecutivo = $this->Folio($cotizacion->folio_consecutivo, $cotizacion->id);
         $cotizacion_nueva->save();
 
 
-        foreach ($request->nombre as $key => $nombre) {            
-            $mercancia= new Mercancia([
+        foreach ($request->nombre as $key => $nombre) {
+            $mercancia = new Mercancia([
 
-                'nombre'=>$nombre,
-                'line1_origen'=>$request->linea1_origen[$key],                
-                'cp_origen'=>$request->cp_origen[$key],
-                'line1_destino'=>$request->linea1_destino[$key],                
-                'cp_destino'=>$request->cp_destino[$key],
-                'naturaleza'=>$request->naturaleza[$key],
-                'alto'=>$request->alto[$key],
-                'ancho'=>$request->ancho[$key],
-                'profundo'=>$request->profundo[$key],
-                'medidas'=>$request->medidas[$key],
-                'peso_br'=>$request->peso_br[$key],
-                'medida_peso'=>$request->medida_peso[$key],
-                'bultos'=>$request->bultos[$key],
-                'peso_total'=>$request->peso_total[$key],
-                'volumen_total'=>$request->volumen_total[$key],
-                'tipo_servicio'=>$request->tipo_servicio[$key],
-                'observaciones'=>$request->observaciones[$key],
-                'eta'=>$request->eta[$key]
+                'nombre' => $nombre,
+                'line1_origen' => $request->linea1_origen[$key],
+                'cp_origen' => $request->cp_origen[$key],
+                'line1_destino' => $request->linea1_destino[$key],
+                'cp_destino' => $request->cp_destino[$key],
+                'naturaleza' => $request->naturaleza[$key],
+                'alto' => $request->alto[$key],
+                'ancho' => $request->ancho[$key],
+                'profundo' => $request->profundo[$key],
+                'medidas' => $request->medidas[$key],
+                'peso_br' => $request->peso_br[$key],
+                'medida_peso' => $request->medida_peso[$key],
+                'bultos' => $request->bultos[$key],
+                'peso_total' => $request->peso_total[$key],
+                'volumen_total' => $request->volumen_total[$key],
+                'tipo_servicio' => $request->tipo_servicio[$key],
+                'observaciones' => $request->observaciones[$key],
+                'eta' => $request->eta[$key]
             ]);
-            if($request->despacho_aduanal[$key]) 
-            {
-                $mercancia->despacho_aduanal=true;
-            } 
-            else
-            {
-                $mercancia->despacho_aduanal=false;
+            if ($request->despacho_aduanal[$key]) {
+                $mercancia->despacho_aduanal = true;
+            } else {
+                $mercancia->despacho_aduanal = false;
             }
-            $mercancia->cotizacion_id=$cotizacion_nueva->id;
+            $mercancia->cotizacion_id = $cotizacion_nueva->id;
             $mercancia->save();
         }
-        return $this->showCotizacion($cotizacion_nueva->prospecto,$cotizacion_nueva);
+        return $this->showCotizacion($cotizacion_nueva->prospecto, $cotizacion_nueva);
     }
 
-    public function VerificarFolio($folio_final,$id)
+    public function VerificarFolio($folio_final, $id)
     {
-        $comparar=Cotizacion::where('folio_consecutivo',$folio_final)->get();        
-        if(sizeof($comparar))
-        {           
-            return $this->Folio($folio_final,$id); 
-        }
-        else
-        {
+        $comparar = Cotizacion::where('folio_consecutivo', $folio_final)->get();
+        if (sizeof($comparar)) {
+            return $this->Folio($folio_final, $id);
+        } else {
             return $folio_final;
         }
     }
 
-    public function Folio($folio_consecutivo,$id)
-    {        
-        if($folio_consecutivo)
-        {
-            
-            $num=substr(''.$folio_consecutivo.'',0,-1);            
-            $folio=ord(substr(''.$folio_consecutivo.'',-1));
-            $folioFinal=$num.chr($folio+1);            
+    public function Folio($folio_consecutivo, $id)
+    {
+        if ($folio_consecutivo) {
+
+            $num = substr('' . $folio_consecutivo . '', 0, -1);
+            $folio = ord(substr('' . $folio_consecutivo . '', -1));
+            $folioFinal = $num . chr($folio + 1);
+        } else {
+            $folioFinal = '' . $id . 'A';
         }
-        else
-        {
-            $folioFinal=''.$id.'A';
-        }       
-       return $this->VerificarFolio($folioFinal, $id);
+        return $this->VerificarFolio($folioFinal, $id);
     }
     //ESTA FUNCIONA Y ES EL RESPALDO
     // public function Folio($folio_consecutivo,$id)
@@ -299,7 +225,7 @@ class ProspectoController extends Controller
     //     $prueba=Cotizacion::where('folio_consecutivo',$cotizacion->folio_consecutivo)->get();
     //     if($folio_consecutivo)
     //     {
-            
+
     //         $id=substr(''.$folio_consecutivo.'',0,-1);            
     //         $folio=ord(substr(''.$folio_consecutivo.'',-1));
     //         return $id.chr($folio+1);            
@@ -321,19 +247,19 @@ class ProspectoController extends Controller
         $edit = false;
         $tipo = null;
         $cliente = new Cliente;
-        return view('cliente.prospectos.cliente',['edit'=>$edit,'tipo_cliente'=>$tipo,'prospecto'=>$prospecto]);
+        return view('cliente.prospectos.cliente', ['edit' => $edit, 'tipo_cliente' => $tipo, 'prospecto' => $prospecto]);
     }
 
-    public function form(Prospecto $prospecto,$tipo)
+    public function form(Prospecto $prospecto, $tipo)
     {
         //dd($prospecto);
         $edit = false;
         $cliente = new Cliente;
         App::setLocale('es');
-        if($tipo === "extranjero_ing"){
+        if ($tipo === "extranjero_ing") {
             App::setLocale('en');
         }
-        return view('cliente.prospectos.cliente',['edit'=>$edit,'tipo_cliente'=>$tipo,'cliente'=>$cliente,'prospecto'=>$prospecto]);
+        return view('cliente.prospectos.cliente', ['edit' => $edit, 'tipo_cliente' => $tipo, 'cliente' => $cliente, 'prospecto' => $prospecto]);
         // dd(__('Datos generales'));
     }
 
@@ -342,13 +268,13 @@ class ProspectoController extends Controller
         //dd($prospecto);
         app('App\Http\Controllers\Cliente\ClienteController')->store($request);
         //$cliente->store($request);
-        $cliente=Cliente::get()->last();
+        $cliente = Cliente::get()->last();
         foreach ($prospecto->cotizacions as $cotizacion) {
-            $cotizacion->prospecto_id=null;
-            $cotizacion->cliente_id=$cliente->id;
+            $cotizacion->prospecto_id = null;
+            $cotizacion->cliente_id = $cliente->id;
             $cotizacion->save();
         }
-        $prospecto->delete();        
+        $prospecto->delete();
         return $this->index();
     }
 
@@ -356,7 +282,6 @@ class ProspectoController extends Controller
 
     public function destroy($id)
     {
-        
     }
 
     public function buscarProspectos(Request $request)
@@ -364,15 +289,15 @@ class ProspectoController extends Controller
         //dd($request);
         $query = $request->input('query');
         //dd($query);
-        $wordsquery = explode(' ',$query);
-        $prospectos = Prospecto::where(function($q) use($wordsquery){
+        $wordsquery = explode(' ', $query);
+        $prospectos = Prospecto::where(function ($q) use ($wordsquery) {
             foreach ($wordsquery as $word) {
                 $q->orWhere('razon_social', 'LIKE', "%$word%")
                     ->orWhere('telefono', 'LIKE', "%$word%")
                     ->orWhere('correo', 'LIKE', "%$word%")
                     ->orWhere('celular', 'LIKE', "%$word%");
             }
-        })->sortable()->paginate(10);//->whereMonth('created_at', date("m"))->sortable()->paginate(10);  
+        })->sortable()->paginate(10); //->whereMonth('created_at', date("m"))->sortable()->paginate(10);  
         $prospectos->withPath('producto?query=' . $query);
         return view('cliente.prospectos.index', ['prospectos' => $prospectos]);
     }

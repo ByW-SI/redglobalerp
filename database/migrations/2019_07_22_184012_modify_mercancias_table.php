@@ -18,11 +18,11 @@ class ModifyMercanciasTable extends Migration
             $table->dropColumn('cp_origen');
             $table->dropColumn('line1_destino');
             $table->dropColumn('cp_destino');
-            $table->dropColumn('tipo_servicio');
-            $table->dropColumn('eta');
-            $table->dropColumn('despacho_aduanal');
-            $table->dropColumn('peligroso_clase');
-            $table->dropColumn('peligroso_nu');
+            // $table->dropColumn('tipo_servicio');
+            // $table->dropColumn('eta');
+            // $table->dropColumn('despacho_aduanal');
+            // $table->dropColumn('peligroso_clase');
+            // $table->dropColumn('peligroso_nu');
         });
     }
 

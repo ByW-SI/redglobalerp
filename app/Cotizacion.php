@@ -32,7 +32,8 @@ class Cotizacion extends Model
         'peligroso_clase',
         'peligroso_nu',
         'peso_total_cot',
-        'volumen_total_cot'
+        'volumen_total_cot',
+        'tipo_despacho'
     ];
 
     public $sortable = [
