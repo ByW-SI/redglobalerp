@@ -97,6 +97,7 @@ Route::resource('empleados.beneficiario','Empleado\EmpleadoBeneficiarioControlle
 Route::get('cotizaciones/index','Empleado\CotizacionesController@index');
 Route::get('cotizaciones/create','Empleado\CotizacionesController@create');
 Route::get('cotizaciones/show','Empleado\CotizacionesController@show');
+Route::get('cotizaciones/{cotizacion}/download','Empleado\CotizacionesController@download')->name('cotizaciones.download');
 //Route::post('cotizaciones/store','Empleado\CotizacionesController@store');
 
 
