@@ -36,7 +36,8 @@ class Cotizacion extends Model
         'tipo_despacho',
         'custodia_desde',
         'custodia_hasta',
-        'observaciones'
+        'observaciones',
+        'prospecto_id'
     ];
 
     public $sortable = [

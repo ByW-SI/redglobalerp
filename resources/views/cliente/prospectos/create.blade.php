@@ -9,7 +9,7 @@
         </div>
         <div class="card-body">
             @csrf
-            <div class="form-row">
+            <div class="row">
                 <div class="form-group col-4">
                     <label class="control-label"><i class="fas fa-asterisk"></i> Nombre completo del prospecto:</label>
                     <input class="form-control" type="text" name="responsable" required="">
@@ -156,7 +156,6 @@
                     <label><i class="fas fa-asterisk"></i> Código Postal</label>
                     <input type="text" class="form-control" name="cp_origen" required="">
                 </div>
-
                 <div class="col-12 mb-2">
                     <h4 class="title">
                         Dirección de destino
@@ -168,12 +167,38 @@
                 </div>
                 <div class="col-4 form-group">
                     <label><i class="fas fa-asterisk"></i> Código Postal</label>
-                    <input type="text" class="form-control" name="cp_destino" required="">
+                    <input type="text" class="form-control" name="cp_destino" required minlength="5" maxlength="5">
                 </div>
 
                 <div class="col-4 form-group">
                     <label><i class="fas fa-asterisk"></i> eta</label>
                     <input type="date" class="form-control" name="eta" required="">
+                </div>
+
+                {{-- INPUT TIENE ESCALAS --}}
+                <div class="col-12">
+                    <h4 class="title">
+                        <label><i class="fas fa-question-circle"></i>¿Tiene escalas?</label>
+                        <input type="checkbox" id="tieneEscalas">
+                    </h4>
+                </div>
+                <div class="col-12 col-md-6" id="contenedorInputsEscala" style="display: none;">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="row" id="inputsEscalas">
+
+                                    </div>
+                                </div>
+                                {{-- BOTON AGREGAR ESCALA --}}
+                                <div class="col-12">
+                                    <button type="button" class="btn btn-success rounded-0"
+                                        id="botonAgregarEscala">+</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="col-4 form-group" id="estibable">
@@ -246,13 +271,100 @@
                     id="peso_total">
             </div>
         </div>
-        <div class="d-flex justify-content-center mb-3">
-            <button type="submit" class="btn btn-success btn-lg">
-                <strong>
-                    <i class="far fa-save"></i>
-                    Guardar
-                </strong>
-            </Button>
+
+        <!-- Button trigger modal -->
+        <button type="button" class="btn btn-success" data-toggle="modal" data-target="#exampleModal">
+            Guardar
+        </button>
+
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Mensaje</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            {{-- USUARIO MENSAJE --}}
+                            <div class="col-12">
+                                <label>CORREO DE USUARIO 1</label>
+                                <input type="text" name="usuarioMensaje[]" class="form-control"
+                                    id="inputUsuarioMensaje">
+                            </div>
+                            <div class="col-12">
+                                <label>CORREO DE USUARIO 2</label>
+                                <input type="text" name="usuarioMensaje[]" class="form-control"
+                                    id="inputUsuarioMensaje">
+                            </div>
+                            {{-- OPCIONES DE MENSAJE TRAFICO --}}
+                            <div class="col-12 mt-3">
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text">
+                                            <input type="checkbox" name="opcionMensaje[]" value="Tráfico"
+                                                aria-label="Checkbox for following text input">
+                                        </div>
+                                    </div>
+                                    <input type="text" class="form-control" aria-label="Text input with checkbox"
+                                        value="Tráfico" readonly>
+                                </div>
+                            </div>
+                            {{-- OPCION DE MENSAJE PRICING --}}
+                            <div class="col-12 mt-3">
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text">
+                                            <input type="checkbox" name="opcionMensaje[]" value="Pricing"
+                                                aria-label="Checkbox for following text input">
+                                        </div>
+                                    </div>
+                                    <input type="text" class="form-control" aria-label="Text input with checkbox"
+                                        value="Pricing" readonly>
+                                </div>
+                            </div>
+                            {{-- OPCION DE MENSAJE PROYECTOS ESPECIALES --}}
+                            <div class="col-12 mt-3">
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text">
+                                            <input type="checkbox" name="opcionMensaje[]" value="Proyectos especiales"
+                                                aria-label="Checkbox for following text input">
+                                        </div>
+                                    </div>
+                                    <input type="text" class="form-control" aria-label="Text input with checkbox"
+                                        value="Proyectos especiales" readonly>
+                                </div>
+                            </div>
+                            {{-- OPCION DE MENSAJE PROYECTOS OPERACIONES --}}
+                            <div class="col-12 mt-3">
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text">
+                                            <input type="checkbox" name="opcionMensaje[]" value="Operaciones"
+                                                aria-label="Checkbox for following text input">
+                                        </div>
+                                    </div>
+                                    <input type="text" class="form-control" aria-label="Text input with checkbox"
+                                        value="Operaciones" readonly>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-success btn-lg">
+                            <strong>
+                                <i class="far fa-save"></i>
+                                Guardar
+                            </strong>
+                        </Button>
+                    </div>
+                </div>
+            </div>
         </div>
     </form>
 </div>
@@ -379,6 +491,68 @@ function mostrarInputsFtl(){
     $('#contenedorInputEsSobredimensionado').show();
     $('#contenedorInputCapacidadRefrigerante').show();
     $('#contenedorInputTemperatura').show();
+}
+
+$(document).on('click', '.btnAgregarEscala', function(){
+    $('#contenedorDireccionesEscala').append(`
+    <div class="col-4 form-group">
+        <label><i class="fas fa-asterisk"></i> Dirección</label>
+        <input type="text" class="form-control" name="direccion_escala[]" />
+    </div>
+    <div class="col-4 form-group">
+        <label><i class="fas fa-asterisk"></i> Código Postal</label>
+        <input type="text" class="form-control" name="cp_escala[]">
+    </div>
+    `);
+});
+
+$(document).on('change','#tieneEscalas', function(){
+
+    var tieneEscalas = $(this).prop("checked");
+
+    if(tieneEscalas){
+        mostrarContenedorInputsEscala();
+        anadirInputEscala();
+        return;
+    }
+
+    ocultarContenedorInputsEscala();
+    limpiarInputsEscalas();
+
+});
+
+$(document).on('click', '#botonAgregarEscala', function(){
+    anadirInputEscala();
+});
+
+function mostrarContenedorInputsEscala(){
+    $('#contenedorInputsEscala').show();
+}
+
+function ocultarContenedorInputsEscala(){
+    $('#contenedorInputsEscala').hide();
+}
+
+function limpiarInputsEscalas(){
+    $('#inputsEscalas').empty();
+}
+
+function anadirInputEscala(){
+    $('#inputsEscalas').append(`
+    
+        <div class="col-6 form-group">
+            <label> Dirección</label>
+            <input type="text" class="form-control" name="direccion_escala[]" />
+        </div>
+
+        <div class="col-6 form-group">
+            <label> Código Postal</label>
+            <input type="text" class="form-control" name="cp_escala[]">
+        </div>
+
+        <hr>
+    
+    `);
 }
 
 </script>
