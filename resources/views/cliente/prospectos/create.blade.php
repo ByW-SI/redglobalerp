@@ -292,14 +292,26 @@
                         <div class="row">
                             {{-- USUARIO MENSAJE --}}
                             <div class="col-12">
-                                <label>CORREO DE USUARIO 1</label>
-                                <input type="text" name="usuarioMensaje[]" class="form-control"
-                                    id="inputUsuarioMensaje">
+                                <label>USUARIO 1</label>
+                                <select name="usuarioMensaje[]" class="form-control">
+                                    <option value="">Seleccionar</option>
+                                    @foreach ($users as $user)
+                                    <option value="{{$user->id}}">{{$user->name}}</option>
+                                    @endforeach
+                                </select>
+                                {{-- <input type="text" name="usuarioMensaje[]" class="form-control"
+                                    id="inputUsuarioMensaje"> --}}
                             </div>
                             <div class="col-12">
-                                <label>CORREO DE USUARIO 2</label>
-                                <input type="text" name="usuarioMensaje[]" class="form-control"
-                                    id="inputUsuarioMensaje">
+                                <label>USUARIO 2</label>
+                                <select name="usuarioMensaje[]" class="form-control">
+                                    <option value="">Seleccionar</option>
+                                    @foreach ($users as $user)
+                                    <option value="{{$user->id}}">{{$user->name}}</option>
+                                    @endforeach
+                                </select>
+                                {{-- <input type="text" name="usuarioMensaje[]" class="form-control"
+                                        id="inputUsuarioMensaje"> --}}
                             </div>
                             {{-- OPCIONES DE MENSAJE TRAFICO --}}
                             <div class="col-12 mt-3">

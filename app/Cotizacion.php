@@ -79,5 +79,9 @@ class Cotizacion extends Model
         return $this->hasOne('App\CotizacionFcl');
     }
 
+    public function users(){
+        return $this->belongsToMany('App\User');
+    }
+
     
 }

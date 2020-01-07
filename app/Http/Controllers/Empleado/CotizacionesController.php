@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Cotizacion;
 use App\Http\Controllers\Controller;
 use App\Services\Cotizacion\DownloadCotizacionService;
+use App\Services\Cotizacion\IndexCotizacionService;
+use Illuminate\Support\Facades\Auth;
 
 class CotizacionesController extends Controller
 {
@@ -22,8 +24,9 @@ class CotizacionesController extends Controller
 
     public function index()
     {
-        $cotizaciones = Cotizacion::get();
-        return view('empleado.cotizaciones.index', ['cotizaciones' => $cotizaciones,]);
+        $indexCotizacionService = new IndexCotizacionService(Auth::user());
+
+        return view('empleado.cotizaciones.index', ['cotizaciones' => $indexCotizacionService->getCotizaciones()]);
     }
 
     /**

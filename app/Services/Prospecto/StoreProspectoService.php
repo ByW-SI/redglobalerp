@@ -10,6 +10,7 @@ use App\Mail\NewProspectoMail;
 use App\Mercancia;
 use App\Prospecto;
 use App\Servicio;
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 
@@ -22,12 +23,12 @@ class StoreProspectoService
     protected $cotizacionFcl;
     protected $cotizacionesEscalas = [];
     protected $mercancias = [];
+    protected $users;
 
     public function __construct(Request $request)
     {
 
-        // dd($request->input());
-
+        $this->setUsers($request);
         $this->crearProspecto($request);
         $this->crearCotizacion($request);
         $this->crearCotizacionFTLSiAplica($request);
@@ -35,6 +36,7 @@ class StoreProspectoService
         $this->crearMercancias($request);
         $this->crearCotizacionEscala($request);
         $this->enviarMensaje($request);
+        $this->relacionarUsuarioYCotizacion();
     }
 
     /**
@@ -136,7 +138,7 @@ class StoreProspectoService
     public function crearCotizacionEscala($request)
     {
 
-        if(!$request->direccion_escala){
+        if (!$request->direccion_escala) {
             return;
         }
 
@@ -146,6 +148,17 @@ class StoreProspectoService
                 'direccion' => $request->direccion_escala[$key],
                 'cp' => $request->cp_escala[$key],
             ]);
+        }
+    }
+
+    public function relacionarUsuarioYCotizacion()
+    {
+        if (!count($this->users)) {
+            return;
+        }
+
+        foreach ($this->users as $user) {
+            $user->cotizacions()->attach($this->cotizacion->id);
         }
     }
 
@@ -173,15 +186,27 @@ class StoreProspectoService
 
     /**
      * =======
+     * SETTERS
+     * =======
+     */
+
+    public function setUsers($request)
+    {
+        $this->users = User::find($request->usuarioMensaje);
+    }
+
+    /**
+     * =======
      * SENDERS
      * =======
      */
 
     public function enviarMensaje($request)
     {
-        foreach ($request->usuarioMensaje as $correo) {
-            if ($correo) {
-                Mail::to($correo)->send(new NewProspectoMail);
+        foreach ($request->usuarioMensaje as $user_id) {
+            $mail = User::find($user_id)->mail;
+            if ($mail) {
+                Mail::to($mail)->send(new NewProspectoMail);
             }
         }
     }

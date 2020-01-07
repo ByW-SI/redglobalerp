@@ -10,6 +10,7 @@ use App\Prospecto;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Services\Prospecto\StoreProspectoService;
+use App\User;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Storage;
 
@@ -33,7 +34,8 @@ class ProspectoController extends Controller
      */
     public function create()
     {
-        return view('cliente.prospectos.create');
+        $users = User::get();
+        return view('cliente.prospectos.create', compact('users'));
     }
 
     public function addCotizacion(Prospecto $prospecto)
