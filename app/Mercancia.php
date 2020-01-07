@@ -32,7 +32,8 @@ class Mercancia extends Model
         // 'eta',
         // 'despacho_aduanal',
         // 'peligroso_clase',
-        // 'peligroso_nu'
+        // 'peligroso_nu',
+        'cotizacion_id'
     ];
     protected $hidden=[
     	'created_at',

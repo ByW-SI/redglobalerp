@@ -109,7 +109,6 @@ class CotizacionController extends Controller
      */
     public function show(Cliente $cliente,Cotizacion $cotizacion)
     {
-        //$cotizacion=$cliente::find(1)->cotizacions;
         return view('cliente.cotizacion.show',['cotizacion'=>$cotizacion]);
         return 'show';
     }

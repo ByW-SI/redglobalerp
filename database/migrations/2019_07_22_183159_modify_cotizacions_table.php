@@ -14,16 +14,16 @@ class ModifyCotizacionsTable extends Migration
     public function up()
     {
         Schema::table('cotizacions', function (Blueprint $table) {
-            $table->text('line1_origen');
-            $table->string('cp_origen');
-            $table->text('line1_destino');
-            $table->string('cp_destino');
-            $table->string('tipo_servicio');
-            $table->date('eta');
-            $table->boolean('despacho_aduanal');
-            $table->string('es_estibable');
-            $table->string('peligroso_clase')->nullable();
-            $table->string('peligroso_nu')->nullable();
+            // $table->text('line1_origen');
+            // $table->string('cp_origen');
+            // $table->text('line1_destino');
+            // $table->string('cp_destino');
+            // $table->string('tipo_servicio');
+            // $table->date('eta');
+            // $table->boolean('despacho_aduanal');
+            // $table->string('es_estibable');
+            // $table->string('peligroso_clase')->nullable();
+            // $table->string('peligroso_nu')->nullable();
             $table->decimal('peso_total_cot');
             $table->decimal('volumen_total_cot');
         });

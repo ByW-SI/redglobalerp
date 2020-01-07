@@ -218,12 +218,12 @@
 						</div>
 						{{-- MOSTRAR ADMINISTRATIVO SOLO SI ES ADMINISTRATIVO --}}
 						@if ($empleado->tipo == "Operadores")
-						<div class="tab-pane fade" id="licencias" style="height: 650px!important;" role="tabpanel" aria-labelledby="licencias-tab">
-							<iframe style="height: 650px!important;" src="{{ route('empleados.licencias.index',['empleados'=>$empleado]) }}"></iframe>
-						</div>
-						<div class="tab-pane fade" id="accidentes" style="height: 650px!important;" role="tabpanel" aria-labelledby="accidentes-tab">
-							<iframe style="height: 650px!important;" src="{{ route('empleados.accidentes.index',['empleado'=>$empleado]) }}"></iframe>
-						</div>
+							<div class="tab-pane fade" id="licencias" style="height: 650px!important;" role="tabpanel" aria-labelledby="licencias-tab">
+								<iframe style="height: 650px!important;" src="{{ route('empleados.licencias.index',['empleados'=>$empleado]) }}"></iframe>
+							</div>
+							<div class="tab-pane fade" id="accidentes" style="height: 650px!important;" role="tabpanel" aria-labelledby="accidentes-tab">
+								<iframe style="height: 650px!important;" src="{{ route('empleados.accidentes.index',['empleado'=>$empleado]) }}"></iframe>
+							</div>
 						@endif
 					</div>
 					

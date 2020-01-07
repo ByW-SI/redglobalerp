@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class ModifyMercanciasServicioTable extends Migration
+class AddTipoDespachoToCotizacionsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,8 @@ class ModifyMercanciasServicioTable extends Migration
      */
     public function up()
     {
-        Schema::create('mercancia_servicio', function (Blueprint $table) {
-            $table->decimal('precio',8,2)->nullable();
-            // $table->decimal('precio',8,2)->nullable();
+        Schema::table('cotizacions', function (Blueprint $table) {
+            $table->string('tipo_despacho')->nullable();
         });
     }
 
@@ -26,8 +25,8 @@ class ModifyMercanciasServicioTable extends Migration
      */
     public function down()
     {
-        Schema::table('mercancia_servicio', function (Blueprint $table) {
-            //
+        Schema::table('cotizacions', function (Blueprint $table) {
+            $table->dropColumn('tipo_despacho');
         });
     }
 }

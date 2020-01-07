@@ -48,4 +48,18 @@ class User extends Authenticatable
     {
         return $this->belongsTo('App\Empleado');
     }
+
+    public function cotizacions(){
+        return $this->belongsToMany('App\Cotizacion');
+    }
+
+    /**
+     * ========
+     * BOOLEANS
+     * ========
+     */
+
+    public function esAdmin(){
+        return $this->id == 1;
+    }
 }
